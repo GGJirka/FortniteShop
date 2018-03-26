@@ -4,18 +4,17 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class FortniteShop extends AppCompatActivity {
 
-    public ArrayList<String> items;
+    public ArrayList<String> urls;
+    public ArrayList<String> itemNames;
     public Document document;
     public String URL = "https://fnbr.co/shop";
     public ListView listOfItems;
@@ -25,10 +24,12 @@ public class FortniteShop extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fortnite_shop);
 
-        items = new ArrayList<>();
+        urls = new ArrayList<>();
+        itemNames = new ArrayList<>();
         listOfItems = (ListView) findViewById(R.id.items);
         JsoupAsyncTask asyncTask = new JsoupAsyncTask();
         asyncTask.execute();
+
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, ArrayList<String>>{
@@ -48,8 +49,15 @@ public class FortniteShop extends AppCompatActivity {
                     if(el.attr("class").equals("col-md-3")){
                         Elements item = el.getAllElements();
                         for(Element index : item){
-                            if(index.attr("class").contains("card splash-card")) {
-                                items.add(index.text());
+                            String[] s = index.attr("src").split("/");
+
+                            if(s[s.length-1].equals("icon.png")){
+                                urls.add(index.attr("src"));
+                            }else if(index.attr("class").contains("card splash-card")){
+                                itemNames.add(index.text());
+                            }
+                            if(index.attr("class").equals("card splash-card rarity-legendary")){
+
                             }
                         }
                     }
@@ -58,15 +66,16 @@ public class FortniteShop extends AppCompatActivity {
             } catch(IOException e){
                 e.printStackTrace();
             }
-            return items;
+            return urls;
         }
 
         @Override
         protected void onPostExecute(ArrayList<String> result){
             super.onPostExecute(result);
-            listOfItems.setAdapter(new ItemList(FortniteShop.this,result));
+            listOfItems.setAdapter(new ItemList(FortniteShop.this,result,itemNames));
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -76,4 +85,5 @@ public class FortniteShop extends AppCompatActivity {
     public void onStop() {
         super.onStop();
     }
+
 }
