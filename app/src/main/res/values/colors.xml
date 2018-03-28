@@ -8,4 +8,5 @@
     <color name="transparentblacktext">#70000000</color>
     <color name="transparentwhite">#FFFF</color>
     <color name="mainBackground">#1e1e1e</color>
+    <color name="dailyItemsText">#FFFF</color>
 </resources>

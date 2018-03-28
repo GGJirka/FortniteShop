@@ -7,16 +7,26 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
+import android.support.v7.app.ActionBar;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.io.InputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -63,14 +73,60 @@ public class ItemList extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = View.inflate(this.context, R.layout.item_list, null);
         LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.item_layout);
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(date);
+        Date time = calendar.getTime();
+        SimpleDateFormat outputFmt = new SimpleDateFormat("h:mm:ss");
+        String dateAsString = outputFmt.format(time);
+        String[] data = dateAsString.split(":");
+
+        if(position == 0){
+            TextView featured = (TextView) v.findViewById(R.id.featured_item);
+            featured.setTextSize(32);
+            featured.setTypeface(font);
+            featured.setVisibility(View.VISIBLE);
+        }
+
+        final int hours = 24-calendar.get(Calendar.HOUR_OF_DAY)-1;
+        final int minutes = 60-Integer.parseInt(data[1])-1;
+        final int seconds = 60-Integer.parseInt(data[2]);
+        final int millis = (hours*60*60 + minutes*60+seconds)*1000;
 
         if(position == this.itemNames.size()-7){
-            TextView dailyItems = (TextView) v.findViewById(R.id.daily_items);
-            dailyItems.setText("DAILY ITEMS"+""+"23:59:59");
-            dailyItems.setTypeface(font);
-            dailyItems.setBackgroundResource(R.drawable.daily_items);
-            dailyItems.setTextSize(32);
 
+            final TextView dailyItems = (TextView) v.findViewById(R.id.daily_item);
+            final TextView dailyTimes = (TextView) v.findViewById(R.id.daily_time);
+            final LinearLayout daily = (LinearLayout) v.findViewById(R.id.featured);
+            dailyItems.setText("DAILY ITEMS");
+            dailyItems.setTypeface(font);
+            dailyTimes.setTypeface(font);
+            dailyTimes.setTextSize(25);
+            dailyItems.setTextSize(25);
+            daily.setBackgroundResource(R.drawable.daily_items);
+            new CountDownTimer(millis, 1000) {
+
+                public void onTick(long millisUntilFinished){
+                    int hours = (int) millisUntilFinished/(1000*60*60);
+                    int minutes = (int) millisUntilFinished/(1000*60);
+                    int seconds = (int) millisUntilFinished/1000;
+                    String mtoMin = String.valueOf((minutes-hours*60));
+                    String mtoSec = String.valueOf((seconds-minutes*60));
+
+                    if(Integer.valueOf(mtoMin)<10){
+                        mtoMin = "0"+Integer.valueOf(mtoMin);
+                    }
+                    if(Integer.valueOf(mtoSec)<10){
+                        mtoSec = "0"+Integer.valueOf(mtoSec);
+                    }
+                    dailyTimes.setText(hours+":"+mtoMin+":"+mtoSec);
+                }
+
+                public void onFinish() {
+                    dailyTimes.setText("00:00:00");
+                }
+            }.start();
         }
 
         itemImg = (ImageView) v.findViewById(R.id.item_img);

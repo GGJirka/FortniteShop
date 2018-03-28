@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -65,9 +67,6 @@ public class FortniteShop extends AppCompatActivity {
                                     if (str != stringArray[stringArray.length - 1]) {
                                         itemNameBuilder.append(str);
                                         itemNameBuilder.append(" ");
-                                        if(str!= stringArray[stringArray.length-2]){
-                                            //itemNameBuilder.append("\n");
-                                        }
                                     }
                                 }
                                 itemPrice.add(stringArray[stringArray.length-1]);
