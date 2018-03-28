@@ -1,5 +1,6 @@
 package shop.fortnite.ggjimmy.fortniteshop;
 
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ public class FortniteShop extends AppCompatActivity {
 
     public ArrayList<String> urls;
     public ArrayList<String> itemNames;
+    public ArrayList<String> itemPrice;
+    public ArrayList<String> rarity;
     public Document document;
     public String URL = "https://fnbr.co/shop";
     public ListView listOfItems;
@@ -26,10 +29,11 @@ public class FortniteShop extends AppCompatActivity {
 
         urls = new ArrayList<>();
         itemNames = new ArrayList<>();
+        itemPrice = new ArrayList<>();
+        rarity = new ArrayList<>();
         listOfItems = (ListView) findViewById(R.id.items);
         JsoupAsyncTask asyncTask = new JsoupAsyncTask();
         asyncTask.execute();
-
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, ArrayList<String>>{
@@ -54,10 +58,29 @@ public class FortniteShop extends AppCompatActivity {
                             if(s[s.length-1].equals("icon.png")){
                                 urls.add(index.attr("src"));
                             }else if(index.attr("class").contains("card splash-card")){
-                                itemNames.add(index.text());
+                                StringBuilder itemNameBuilder = new StringBuilder();
+                                String[] stringArray = index.text().split(" ");
+
+                                for(String str : stringArray) {
+                                    if (str != stringArray[stringArray.length - 1]) {
+                                        itemNameBuilder.append(str);
+                                        itemNameBuilder.append(" ");
+                                        if(str!= stringArray[stringArray.length-2]){
+                                            //itemNameBuilder.append("\n");
+                                        }
+                                    }
+                                }
+                                itemPrice.add(stringArray[stringArray.length-1]);
+                                itemNames.add(itemNameBuilder.toString().toUpperCase());
                             }
                             if(index.attr("class").equals("card splash-card rarity-legendary")){
-
+                                rarity.add("legendary");
+                            }else if(index.attr("class").equals("card splash-card rarity-rare")){
+                                rarity.add("rare");
+                            }else if(index.attr("class").equals("card splash-card rarity-epic")){
+                                rarity.add("epic");
+                            }else if(index.attr("class").equals("card splash-card rarity-uncommon")){
+                                rarity.add("uncommon");
                             }
                         }
                     }
@@ -72,7 +95,8 @@ public class FortniteShop extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<String> result){
             super.onPostExecute(result);
-            listOfItems.setAdapter(new ItemList(FortniteShop.this,result,itemNames));
+            listOfItems.setAdapter(new ItemList(FortniteShop.this,result,itemNames, itemPrice,
+                    Typeface.createFromAsset(getAssets(),"burbank.otf"), rarity));
         }
     }
 
