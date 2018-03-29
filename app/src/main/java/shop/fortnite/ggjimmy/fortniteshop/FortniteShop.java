@@ -1,11 +1,19 @@
 package shop.fortnite.ggjimmy.fortniteshop;
 
+import android.content.Context;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,12 +31,13 @@ public class FortniteShop extends AppCompatActivity {
     public Document document;
     public String URL = "https://fnbr.co/shop";
     public ListView listOfItems;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fortnite_shop);
-
+        getSupportActionBar().hide();
         urls = new ArrayList<>();
         itemNames = new ArrayList<>();
         itemPrice = new ArrayList<>();
@@ -36,6 +45,13 @@ public class FortniteShop extends AppCompatActivity {
         listOfItems = (ListView) findViewById(R.id.items);
         JsoupAsyncTask asyncTask = new JsoupAsyncTask();
         asyncTask.execute();
+
+        TextView mainTitle = (TextView) findViewById(R.id.main_title);
+        mainTitle.setTypeface(Typeface.createFromAsset(getAssets(),"burbank.otf"));
+        MobileAds.initialize(this, "ca-app-pub-5090360471586053~9240769580");
+        mAdView = (AdView) findViewById(R.id.example);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, ArrayList<String>>{

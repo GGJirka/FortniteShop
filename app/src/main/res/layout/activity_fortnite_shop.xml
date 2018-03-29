@@ -8,12 +8,35 @@
     android:layout_height="match_parent"
     tools:context="shop.fortnite.ggjimmy.fortniteshop.FortniteShop">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="50sp"
+        android:text="ITEM SHOP"
+        android:gravity="center"
+        android:paddingTop="20sp"
+        android:paddingBottom="20sp"
+        android:background="@color/mainTitle"
+        android:id="@+id/main_title"
+        android:textColor="@color/transparentwhite"/>
+
     <ListView
         android:layout_marginTop="10sp"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/items"
-        android:dividerHeight="0sp"/>
+        android:dividerHeight="0sp"
+        android:layout_below="@+id/main_title" />
 
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/example"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-5090360471586053/7652355747">
+    </com.google.android.gms.ads.AdView>
 
 </RelativeLayout>

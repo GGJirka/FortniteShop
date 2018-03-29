@@ -102,8 +102,8 @@ public class ItemList extends BaseAdapter {
             dailyItems.setText("DAILY ITEMS");
             dailyItems.setTypeface(font);
             dailyTimes.setTypeface(font);
-            dailyTimes.setTextSize(25);
-            dailyItems.setTextSize(25);
+            dailyTimes.setTextSize(29);
+            dailyItems.setTextSize(29);
             daily.setBackgroundResource(R.drawable.daily_items);
             new CountDownTimer(millis, 1000) {
 
