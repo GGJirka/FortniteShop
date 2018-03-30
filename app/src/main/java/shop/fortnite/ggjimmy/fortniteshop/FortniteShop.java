@@ -1,20 +1,20 @@
 package shop.fortnite.ggjimmy.fortniteshop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class FortniteShop extends AppCompatActivity {
-
+    public static final String INTENT_ID = "SKIN_NAME";
     public ArrayList<String> urls;
     public ArrayList<String> itemNames;
     public ArrayList<String> itemPrice;
@@ -112,6 +112,15 @@ public class FortniteShop extends AppCompatActivity {
             super.onPostExecute(result);
             listOfItems.setAdapter(new ItemList(FortniteShop.this,result,itemNames, itemPrice,
                     Typeface.createFromAsset(getAssets(),"burbank.otf"), rarity));
+            listOfItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String skinName = itemNames.get(position);
+                    Intent skinIntent = new Intent(FortniteShop.this,SkinIntent.class);
+                    skinIntent.putExtra(INTENT_ID, skinName);
+                    startActivity(skinIntent);
+                }
+            });
         }
     }
 

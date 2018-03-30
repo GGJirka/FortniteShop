@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FortniteBR Daily items</string>
+    <string name="title_activity_skin_intent">SkinIntent</string>
 </resources>
