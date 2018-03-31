@@ -2,6 +2,7 @@ package shop.fortnite.ggjimmy.fortniteshop;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -24,10 +26,13 @@ import java.util.ArrayList;
 
 public class FortniteShop extends AppCompatActivity {
     public static final String INTENT_ID = "SKIN_NAME";
+    public static final String OUTFIT_TYPE = "OUTFIT_TYPE";
+    public static final String RARITY = "RARITY";
     public ArrayList<String> urls;
     public ArrayList<String> itemNames;
     public ArrayList<String> itemPrice;
     public ArrayList<String> rarity;
+    public ArrayList<String> outfitType;
     public Document document;
     public String URL = "https://fnbr.co/shop";
     public ListView listOfItems;
@@ -42,13 +47,16 @@ public class FortniteShop extends AppCompatActivity {
         itemNames = new ArrayList<>();
         itemPrice = new ArrayList<>();
         rarity = new ArrayList<>();
+        outfitType = new ArrayList<>();
         listOfItems = (ListView) findViewById(R.id.items);
         JsoupAsyncTask asyncTask = new JsoupAsyncTask();
         asyncTask.execute();
 
         TextView mainTitle = (TextView) findViewById(R.id.main_title);
-        mainTitle.setTypeface(Typeface.createFromAsset(getAssets(),"burbank.otf"));
+
+        mainTitle.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(),"burbank.otf"));
         MobileAds.initialize(this, "ca-app-pub-5090360471586053~9240769580");
+
         mAdView = (AdView) findViewById(R.id.example);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -75,6 +83,9 @@ public class FortniteShop extends AppCompatActivity {
 
                             if(s[s.length-1].equals("icon.png")){
                                 urls.add(index.attr("src"));
+
+                                String[] typeSplit = index.attr("class").split(" ");
+                                outfitType.add(typeSplit[typeSplit.length-1]);
                             }else if(index.attr("class").contains("card splash-card")){
                                 StringBuilder itemNameBuilder = new StringBuilder();
                                 String[] stringArray = index.text().split(" ");
@@ -95,7 +106,7 @@ public class FortniteShop extends AppCompatActivity {
                             }else if(index.attr("class").equals("card splash-card rarity-epic")){
                                 rarity.add("epic");
                             }else if(index.attr("class").equals("card splash-card rarity-uncommon")){
-                                rarity.add("uncommon");
+                                 rarity.add("uncommon");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              rarity.add("uncommon");
                             }
                         }
                     }
@@ -110,14 +121,17 @@ public class FortniteShop extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<String> result){
             super.onPostExecute(result);
+            ProgressBar loading = (ProgressBar) findViewById(R.id.shop_loading);
+            loading.setVisibility(View.GONE);
             listOfItems.setAdapter(new ItemList(FortniteShop.this,result,itemNames, itemPrice,
                     Typeface.createFromAsset(getAssets(),"burbank.otf"), rarity));
             listOfItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String skinName = itemNames.get(position);
                     Intent skinIntent = new Intent(FortniteShop.this,SkinIntent.class);
-                    skinIntent.putExtra(INTENT_ID, skinName);
+                    skinIntent.putExtra(INTENT_ID, itemNames.get(position));
+                    skinIntent.putExtra(OUTFIT_TYPE, rarity.get(position));
+                    skinIntent.putExtra(RARITY, outfitType.get(position));
                     startActivity(skinIntent);
                 }
             });
@@ -129,7 +143,7 @@ public class FortniteShop extends AppCompatActivity {
         super.onStart();
     }
 
-    @Override
+    @Override                                                                                                                                                                                                                       
     public void onStop() {
         super.onStop();
     }

@@ -4,10 +4,19 @@
     android:id="@+id/activity_fortnite_shop"
     android:layout_width="match_parent"
     android:background="@color/mainBackground"
-
     android:layout_height="match_parent"
     tools:context="shop.fortnite.ggjimmy.fortniteshop.FortniteShop">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:id="@+id/shop_loading" />
+    </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +35,8 @@
         android:layout_width="match_parent"
         android:id="@+id/items"
         android:dividerHeight="0sp"
-        android:layout_below="@+id/main_title" />
+        android:layout_below="@+id/main_title"
+        android:choiceMode="singleChoice" />
 
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"

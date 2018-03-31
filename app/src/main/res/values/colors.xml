@@ -10,4 +10,6 @@
     <color name="mainBackground">#1e1e1e</color>
     <color name="dailyItemsText">#FFFF</color>
     <color name="mainTitle">#673AB7</color>
+    <color name="epic">#c751f8</color>
+    <color name="test">#000</color>
 </resources>

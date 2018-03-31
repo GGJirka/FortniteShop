@@ -43,6 +43,7 @@ public class ItemList extends BaseAdapter {
     public TextView itemPrice;
     public Typeface font;
     public ArrayList<String> rarity;
+
     //constructor param: list of items
     public ItemList(Context context, ArrayList<String> items, ArrayList<String> itemNames, ArrayList<String> price,
                     Typeface font, ArrayList<String> rarity){
@@ -72,7 +73,7 @@ public class ItemList extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = View.inflate(this.context, R.layout.item_list, null);
-        LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.item_layout);
+        final LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.item_layout);
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -105,8 +106,8 @@ public class ItemList extends BaseAdapter {
             dailyTimes.setTextSize(29);
             dailyItems.setTextSize(29);
             daily.setBackgroundResource(R.drawable.daily_items);
-            new CountDownTimer(millis, 1000) {
 
+            new CountDownTimer(millis, 1000) {
                 public void onTick(long millisUntilFinished){
                     int hours = (int) millisUntilFinished/(1000*60*60);
                     int minutes = (int) millisUntilFinished/(1000*60);
@@ -137,22 +138,21 @@ public class ItemList extends BaseAdapter {
         itemPrice.setText(price.get(position));
         itemText.setTypeface(font);
 
-
-        switch(rarity.get(position)) {
+        switch(rarity.get(position)){
             case "legendary":
-                linearLayout.setBackgroundResource(R.drawable.legendary);
+                linearLayout.setBackgroundResource(R.drawable.legendary_onclick);
                 break;
 
             case "epic":
-                linearLayout.setBackgroundResource(R.drawable.epic);
+                linearLayout.setBackgroundResource(R.drawable.list_selector);
                 break;
 
             case "rare":
-                linearLayout.setBackgroundResource(R.drawable.rare);
+                linearLayout.setBackgroundResource(R.drawable.rare_onclick);
                 break;
 
             case "uncommon":
-                linearLayout.setBackgroundResource(R.drawable.uncommon);
+                linearLayout.setBackgroundResource(R.drawable.uncommon_onclick);
                 break;
         }
         v.setTag(position);
