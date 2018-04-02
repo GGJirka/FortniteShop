@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_all_skins"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="shop.fortnite.ggjimmy.fortniteshop.AllSkins"
+    android:background="@color/mainBackground">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/skins_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/ToolbarLight"
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/transparentwhite"
+        android:textSize="30sp"
+        android:id="@+id/all_skins_title"/>
+    </android.support.v7.widget.Toolbar>
+
+
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_view"
+            app:searchBackground="@color/colorPrimary"
+            android:textColor="#FFF"
+            app:searchSuggestionBackground="@color/colorPrimary"
+            app:searchBackIcon="@drawable/back_icon"
+            app:searchCloseIcon="@drawable/close_icon"
+            android:textColorHint="#FFF"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/all_skins_list_view"
+            android:layout_marginTop="70sp"
+            android:divider="@color/mainBackground"/>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

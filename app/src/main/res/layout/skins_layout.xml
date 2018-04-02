@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
+        android:layout_marginBottom="5sp"
+        android:layout_gravity="center">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_layout1"
+        android:orientation="vertical">
+
+        <ImageView android:layout_height="80sp"
+            android:layout_width="120sp"
+            android:id="@+id/item_img"
+            android:layout_gravity="center"
+            android:background="@color/transparentblack"/>
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/transparentwhite"
+            android:id="@+id/item_name1"
+            android:background="@color/transparentblacktext"
+            android:textStyle="bold" />
+        <FrameLayout
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparentblacktext">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/vbucks_icon"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/transparentwhite"
+                android:id="@+id/item_price1" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_layout2"
+        android:orientation="vertical"
+        android:layout_marginLeft="30sp">
+
+        <ImageView android:layout_height="80sp"
+            android:layout_width="120sp"
+            android:id="@+id/item_img2"
+            android:layout_gravity="center"
+            android:background="@color/transparentblack"/>
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/transparentwhite"
+            android:id="@+id/item_name2"
+            android:background="@color/transparentblacktext"
+            android:textStyle="bold" />
+        <FrameLayout
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparentblacktext">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/vbucks_icon"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/transparentwhite"
+                android:id="@+id/item_price2" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    </LinearLayout>
+    </FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:textSize="6sp"/>
+</LinearLayout>

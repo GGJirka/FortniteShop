@@ -25,7 +25,7 @@
         android:orientation="vertical"
         android:layout_gravity="center">
 
-    <ImageView android:layout_height="250sp"
+    <ImageView android:layout_height="230sp"
         android:layout_width="270sp"
         android:id="@+id/item_img"
         android:layout_gravity="center"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="55sp"
+            android:textSize="40sp"
             android:textColor="@color/transparentwhite"
             android:id="@+id/item_name"
             android:background="@color/transparentblacktext"
@@ -53,7 +53,7 @@
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/vbucks_icon"
                 android:gravity="center"
-                android:textSize="35sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 android:textColor="@color/transparentwhite"
                 android:id="@+id/item_price" />

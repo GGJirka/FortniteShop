@@ -2,6 +2,7 @@ package shop.fortnite.ggjimmy.fortniteshop;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -136,6 +137,11 @@ public class FortniteShop extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void onSkinsClick(View v){
+        Intent intent = new Intent(FortniteShop.this, AllSkins.class);
+        startActivity(intent);
     }
 
     @Override
