@@ -11,10 +11,12 @@ import android.widget.ImageView;
  */
 public class DrawView extends ImageView {
     public String rarity;
+    public String price;
 
-    public DrawView(Context context,String rarity) {
+    public DrawView(Context context,String rarity,String price) {
         super(context);
         this.rarity = rarity;
+        this.price = price;
     }
 
     @Override
@@ -38,11 +40,18 @@ public class DrawView extends ImageView {
                 break;
 
         }
+
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(10);
+        float rightx;
         float leftx = 0;
         float topy = 0;
-        float rightx = 110;
+        if(price != null){
+            rightx = 30*price.length();
+        }else{
+            rightx = 120;
+        }
+
         float bottomy = 200;
         canvas.drawRect(leftx, topy, rightx, bottomy, paint);
         canvas.drawRect(scale, topy, rightx, bottomy, paint);

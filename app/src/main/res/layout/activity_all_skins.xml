@@ -13,20 +13,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/skins_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:theme="@style/ToolbarLight"
-        app:popupTheme="@style/AppTheme.PopupOverlay" >
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/transparentwhite"
-        android:textSize="30sp"
-        android:id="@+id/all_skins_title"/>
-    </android.support.v7.widget.Toolbar>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/skins_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:theme="@style/ToolbarLight"
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/transparentwhite"
+                android:textSize="30sp"
+                android:id="@+id/all_skins_title"/>
+        </android.support.v7.widget.Toolbar>
 
 
         <com.miguelcatalan.materialsearchview.MaterialSearchView

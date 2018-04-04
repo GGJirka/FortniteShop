@@ -20,4 +20,18 @@
     <style name="ToolbarLight" parent="android:Theme.Holo">
         <item name="android:homeAsUpIndicator">@drawable/back_icon</item>
     </style>
+
+    <style name="MenuBackground" parent="AppTheme.NoActionBar">
+        <item name="android:itemBackground">@color/colorPrimary</item>
+        <item name="android:itemTextAppearance">@style/MenuStyle</item>
+        <item name="android:divider">@color/colorPrimary</item>
+    </style>
+
+    <style name="MenuStyle" parent="style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/transparentwhite</item>
+        <item name="android:textSize">20sp</item>
+
+    </style>
+
+
 </resources>

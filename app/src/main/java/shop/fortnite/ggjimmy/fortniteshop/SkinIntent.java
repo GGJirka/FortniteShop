@@ -33,11 +33,13 @@ public class SkinIntent extends AppCompatActivity {
     public static final String INTENT_ID = "SKIN_NAME";
     public static final String OUTFIT_TYPE = "OUTFIT_TYPE";
     public static final String RARITY = "RARITY";
+    public static final String PRICE = "PRICE";
     public LinearLayout layout;
     public String skinName;
     public DrawView skin;
     public String outfitType;
     public String rarity;
+    public String price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class SkinIntent extends AppCompatActivity {
         skinName = getIntent().getExtras().getString(INTENT_ID);
         outfitType = getIntent().getExtras().getString(OUTFIT_TYPE);
         rarity = getIntent().getExtras().getString(RARITY);
+        price = getIntent().getExtras().getString(PRICE);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
@@ -58,8 +62,14 @@ public class SkinIntent extends AppCompatActivity {
         title.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(),"burbank.otf"));
         title.setText("SKIN DETAILS");
 
-
-        new JsoupAsyncTask().execute();
+        if( price != null && price.equals("???")) {
+            TextView noSkinDisplay = (TextView) findViewById(R.id.coming_soon);
+            noSkinDisplay.setText("Coming soon");
+            noSkinDisplay.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(),"burbank.otf"));
+            hideLoading();
+        }else{
+            new JsoupAsyncTask().execute();
+        }
 
 
     }
@@ -128,9 +138,8 @@ public class SkinIntent extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap result){
-            ProgressBar loading = (ProgressBar) findViewById(R.id.skin_loading);
-            loading.setVisibility(View.GONE);
-            skin = new DrawView(SkinIntent.this,outfitType);
+            hideLoading();
+            skin = new DrawView(SkinIntent.this,outfitType, price);
 
             skin.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
@@ -148,7 +157,10 @@ public class SkinIntent extends AppCompatActivity {
             layout.addView(skin);
         }
     }
-
+    public void hideLoading(){
+        ProgressBar loading = (ProgressBar) findViewById(R.id.skin_loading);
+        loading.setVisibility(View.GONE);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         this.finish();

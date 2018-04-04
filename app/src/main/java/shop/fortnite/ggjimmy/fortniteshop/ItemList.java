@@ -155,6 +155,7 @@ public class ItemList extends BaseAdapter {
                 linearLayout.setBackgroundResource(R.drawable.uncommon_onclick);
                 break;
         }
+
         v.setTag(position);
 
         return v;

@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <!--
- ATTENTION: This was auto-generated to add Google Play services to your project for
+ ATTENTION: This was auto-generat                                                                                                                                                                                                                                                                                                                                       ed to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
         -->
         <meta-data
@@ -31,7 +31,7 @@
             android:label="@string/title_activity_skin_intent"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AllSkins"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/MenuBackground"/>
     </application>
 
 </manifest>

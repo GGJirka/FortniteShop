@@ -18,6 +18,20 @@
             android:indeterminate="true"
             android:id="@+id/skin_loading"
             />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="40sp"
+            android:textColor="@color/transparentwhite"
+            android:id="@+id/coming_soon"/>
     </RelativeLayout>
 <LinearLayout
     android:layout_width="match_parent"
