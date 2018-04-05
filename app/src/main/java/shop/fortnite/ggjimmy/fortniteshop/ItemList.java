@@ -6,8 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.support.v4.util.LruCache;
 import android.support.v7.app.ActionBar;
 import android.view.Gravity;
 import android.view.View;
@@ -36,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 public class ItemList extends BaseAdapter {
     public Context context;
     public ArrayList<String> items;
+    public ArrayList<Bitmap> bitmaps;
     public ArrayList<String> itemNames;
     public ArrayList<String> price;
     public ImageView itemImg;
@@ -44,7 +47,6 @@ public class ItemList extends BaseAdapter {
     public Typeface font;
     public ArrayList<String> rarity;
 
-    //constructor param: list of items
     public ItemList(Context context, ArrayList<String> items, ArrayList<String> itemNames, ArrayList<String> price,
                     Typeface font, ArrayList<String> rarity){
         this.context = context;
@@ -74,6 +76,8 @@ public class ItemList extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = View.inflate(this.context, R.layout.item_list, null);
         final LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.item_layout);
+        itemImg = (ImageView) v.findViewById(R.id.item_img);
+
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -130,14 +134,17 @@ public class ItemList extends BaseAdapter {
             }.start();
         }
 
-        itemImg = (ImageView) v.findViewById(R.id.item_img);
         itemText = (TextView) v.findViewById(R.id.item_name);
         itemPrice = (TextView) v.findViewById(R.id.item_price);
-        new DownloadItemImageTask(itemImg).execute(items.get(position));
         itemText.setText(itemNames.get(position));
         itemPrice.setText(price.get(position));
         itemText.setTypeface(font);
 
+
+        if(position ==0 || position == 1){
+            new DownloadItemImageTask(itemImg).execute(items.get(position));
+        }
+        itemImg.setImageBitmap(FortniteShop.getBitmapFromMemoryCache(itemNames.get(position)));
         switch(rarity.get(position)){
             case "legendary":
                 linearLayout.setBackgroundResource(R.drawable.legendary_onclick);
@@ -160,30 +167,27 @@ public class ItemList extends BaseAdapter {
 
         return v;
     }
+
     private class DownloadItemImageTask extends AsyncTask<String, Void, Bitmap>{
+        public ImageView itemImg;
 
-        private ImageView img;
-
-        public DownloadItemImageTask(ImageView img){
-            this.img = img;
+        public DownloadItemImageTask(ImageView view){
+            this.itemImg = view;
         }
-
         @Override
-        protected Bitmap doInBackground(String... params) {
-            String urls = params[0];
+        protected Bitmap doInBackground(String... params)   {
             Bitmap imageBitmap = null;
-
-            try{
-                InputStream inputStream = new URL(urls).openStream();
-                imageBitmap = BitmapFactory.decodeStream(inputStream);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+                try {
+                    InputStream inputStream = new URL(params[0]).openStream();
+                    imageBitmap = BitmapFactory.decodeStream(inputStream);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             return imageBitmap;
         }
 
         protected void onPostExecute(Bitmap result){
-            img.setImageBitmap(result);
+            itemImg.setImageBitmap(result);
         }
     }
 }

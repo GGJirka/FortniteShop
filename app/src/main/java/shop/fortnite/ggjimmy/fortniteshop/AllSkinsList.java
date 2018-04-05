@@ -105,8 +105,9 @@ public class AllSkinsList extends BaseAdapter{
             setFont(name2);
             setFont(price1);
             setFont(price2);
-            new DownloadItemImageTask(skin1).execute(urls.list.get(position));
-            new DownloadItemImageTask(skin2).execute(urls.list2.get(position));
+
+            /*new DownloadItemImageTask(skin1).execute(urls.list.get(position));
+            new DownloadItemImageTask(skin2).execute(urls.list2.get(position));*/
             v.setTag(position);
 
         }catch(Exception e){
