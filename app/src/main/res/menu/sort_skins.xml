@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/group"
         android:checkableBehavior="single">
         <item
             android:id="@+id/sort_outfit"
             android:icon="@drawable/set_type"
             android:showAsAction="ifRoom"
-            android:title="outfits"
+            android:title="Outfits"
            />
         <item
             android:id="@+id/sort_pickaxe"
             android:showAsAction="ifRoom"
-            android:title="pickaxes"
+            android:title="Pickaxes"
            />
         <item
             android:id="@+id/sort_glinder"
             android:showAsAction="ifRoom"
-            android:title="gliders"
+            android:title="Gliders"
             />
         <item
             android:id="@+id/sort_emote"
             android:showAsAction="ifRoom"
-            android:title="emotes"
+            android:title="Emotes"
             />
     </group>
 </menu>

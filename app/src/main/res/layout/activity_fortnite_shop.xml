@@ -41,24 +41,34 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:weightSum="1">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="50sp"
-                android:text="ITEM SHOP"
-                android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                android:id="@+id/main_title"
-                android:layout_marginRight="10sp"
-                android:gravity="center"
-                android:textColor="@color/transparentwhite" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/all_skins"
-                android:onClick="onSkinsClick"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/all_skins_icon"
+                    android:onClick="onSkinsClick"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginEnd="14dp"
+                    android:id="@+id/imageView" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="50sp"
+                    android:text="ITEM SHOP"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
+                    android:id="@+id/main_title"
+                    android:layout_marginRight="18dp"
+                    android:gravity="center"
+                    android:textColor="@color/transparentwhite" />
+            </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>

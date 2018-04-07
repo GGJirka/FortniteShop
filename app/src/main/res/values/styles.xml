@@ -30,6 +30,7 @@
     <style name="MenuStyle" parent="style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/transparentwhite</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:divider">@color/colorPrimary</item>
 
     </style>
 

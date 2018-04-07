@@ -62,7 +62,7 @@ public class AllSkins extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         TextView title = (TextView) findViewById(R.id.all_skins_title);
-        title.setText("All Skins");
+        title.setText("All Items");
         title.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(),"burbank.otf"));
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.set_type);
         toolbar.setOverflowIcon(drawable);
@@ -102,11 +102,11 @@ public class AllSkins extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_item,menu);
+        //getMenuInflater().inflate(R.menu.menu_item,menu);
         getMenuInflater().inflate(R.menu.sort_skins,menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        search.setMenuItem(item);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  return true;
+        //MenuItem item = menu.findItem(R.id.action_search);
+        //search.setMenuItem(item);
+        return true;
     }
 
 
@@ -178,65 +178,10 @@ public class AllSkins extends AppCompatActivity {
                 urls.list.remove(urls.list.size() - i);
             }
         }
-        /*for(int i=0;i<names.list.size();i++){
-            String name = names.list.get(i);
-
-            String[] splitName = name.split("/");
-
-            drawables.add(getResources().getDrawable(R.drawable.a5ab155400585dc38d8138e51));
-            new SetImageAsyncTask("a"+splitName[splitName.length-2], drawables).execute();
-        }*/
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
         adapter = new AllSkinsList(AllSkins.this, urls, names, prices, rarity,outfitType, drawables, drawables2);
         listView.setAdapter(adapter);
     }
-    private class TestAsync extends AsyncTask<Void, Void, Void>{
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            return null;
-        }
-    }
-
-    private class SetImageAsyncTask extends AsyncTask<Void, Void, Drawable>{
-        String name;
-        ArrayList<Drawable> skins;
-
-        public SetImageAsyncTask(String name, ArrayList<Drawable> drawables){
-            this.name = name;
-            this.skins = drawables;
-        }
-
-        @Override
-        protected Drawable doInBackground(Void... params) {
-            int id = 0;
-            try {
-                 id = getApplicationContext().getResources().getIdentifier(name, "drawable", getApplicationContext().getPackageName());
-                //int id2 = getApplicationContext().getResources().getIdentifier(name2, "drawable", getApplicationContext().getPackageName());
-                //skins.add(getApplicationContext().getResources().getDrawable(id));
-                //skins.add(getApplicationContext().getResources().getDrawable(id2));
-            }catch(Exception e){
-                Log.e("POST","exception",e);
-            }
-            return getApplicationContext().getResources().getDrawable(id);
-        }
-
-        @Override
-        protected void onPostExecute(Drawable drawable) {
-            super.onPostExecute(drawable);
-            try {
-                drawables.add(drawable);
-            }catch(Exception n){
-                Log.e("POST","exception",n);
-            }
-        }
-    }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, ArrayList<String>>{
 

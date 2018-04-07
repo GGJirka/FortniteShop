@@ -17,8 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.net.URL;
@@ -29,7 +27,7 @@ import java.util.ArrayList;
  * Created by ggjimmy on 4/1/18.
  */
 
-public class AllSkinsList extends BaseAdapter{
+public class AllSkinsListFake {
 
     public static final String INTENT_ID = "SKIN_NAME";
     public static final String OUTFIT_TYPE = "OUTFIT_TYPE";
@@ -43,36 +41,21 @@ public class AllSkinsList extends BaseAdapter{
     public SkinHolder rarity;
     public SkinHolder outfitType;
     public Context context;
+    public int position;
 
-    public AllSkinsList(Context context, SkinHolder urls, SkinHolder names, SkinHolder prices,
-                        SkinHolder rarity,SkinHolder outfitType,ArrayList<Drawable> drawables, ArrayList<Drawable> drawables2){
+    public AllSkinsListFake(Context context, SkinHolder urls, SkinHolder names, SkinHolder prices,
+                        SkinHolder rarity,SkinHolder outfitType,int position){
         this.context = context;
         this.urls = urls;
         this.names = names;
         this.prices = prices;
         this.rarity = rarity;
         this.outfitType = outfitType;
-        this.drawables = drawables;
-        this.drawables2 = drawables2;
+        this.position = position;
     }
 
-    @Override
-    public int getCount() {
-        return this.urls.list.size();
-    }
 
-    @Override
-    public Object getItem(int position) {
-        return this.urls.list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView() {
         View v = null;
         try {
             v = View.inflate(this.context, R.layout.skins_layout, null);
@@ -87,16 +70,16 @@ public class AllSkinsList extends BaseAdapter{
             TextView price1 = (TextView) v.findViewById(R.id.item_price1);
             TextView price2 = (TextView) v.findViewById(R.id.item_price2);
 
-            Drawable vbucksIcon = context.getResources().getDrawable(R.drawable.vbucks_mini);
+            //Drawable vbucksIcon = context.getResources().getDrawable(R.drawable.vbucks_icon);
 
             if (prices.list.get(position).contains(",") || prices.list.get(position).length() < 4) {
                 if (!prices.list.get(position).contains("?")) {
-                    price1.setCompoundDrawablesWithIntrinsicBounds(vbucksIcon, null, null, null);
+                    //price1.setCompoundDrawablesWithIntrinsicBounds(vbucksIcon, null, null, null);
                 }
             }
             if (prices.list2.get(position).contains(",") || prices.list2.get(position).length() < 4) {
                 if (!prices.list2.get(position).contains("?")) {
-                    price2.setCompoundDrawablesWithIntrinsicBounds(vbucksIcon, null, null, null);
+                    //price2.setCompoundDrawablesWithIntrinsicBounds(vbucksIcon, null, null, null);
                 }
             }
             LinearLayout layout1 = (LinearLayout) v.findViewById(R.id.item_layout1);
@@ -115,10 +98,14 @@ public class AllSkinsList extends BaseAdapter{
             setFont(price1);
             setFont(price2);
 
-            String[] split = urls.list.get(position).split("/");
-            String[] split2 = urls.list2.get(position).split("/");
-            Picasso.with(skin1.getContext()).load("file:///android_asset/a"+split[split.length-2]+".png").into(skin1);
-            Picasso.with(skin2.getContext()).load("file:///android_asset/a"+split2[split2.length-2]+".png").into(skin2);
+            final String[] split = urls.list.get(position).split("/");
+            final String[] split2 = urls.list2.get(position).split("/");
+
+
+            new SetImageAsyncTask(skin1,"a"+split[split.length-2]).execute();
+            new SetImageAsyncTask(skin2,"a"+split2[split2.length-2]).execute();
+
+
             v.setTag(position);
 
         }catch(Exception e){
@@ -192,7 +179,7 @@ public class AllSkinsList extends BaseAdapter{
         }
     }
 
-    private class SetImageAsyncTask extends AsyncTask<Void, Void, Void>{
+    private class SetImageAsyncTask extends AsyncTask<Void, Void, Drawable>{
         ImageView imageView;
         String name;
 
@@ -202,11 +189,24 @@ public class AllSkinsList extends BaseAdapter{
         }
 
         @Override
-        protected Void doInBackground(Void... params){
-            Picasso.with(imageView.getContext()).load(name).into(imageView);
-            return null;
+        protected Drawable doInBackground(Void... params){
+            int id = 0;
+            try {
+                id = imageView.getContext().getResources().getIdentifier(name, "drawable", imageView.getContext().getPackageName());
+            }catch(Exception e){
+                Log.e("POST","exception",e);
+            }
+            return imageView.getContext().getResources().getDrawable(id);
         }
 
-
+        @Override
+        protected void onPostExecute(Drawable drawable){
+            super.onPostExecute(drawable);
+            try {
+                imageView.setImageDrawable(drawable);
+            }catch(Exception n){
+                Log.e("POST","exception",n);
+            }
+        }
     }
 }

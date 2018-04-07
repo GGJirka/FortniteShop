@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.v4.util.LruCache;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -47,15 +50,17 @@ public class ItemList extends BaseAdapter {
     public TextView itemPrice;
     public Typeface font;
     public ArrayList<String> rarity;
+    public boolean download;
 
     public ItemList(Context context, ArrayList<String> items, ArrayList<String> itemNames, ArrayList<String> price,
-                    Typeface font, ArrayList<String> rarity){
+                    Typeface font, ArrayList<String> rarity, boolean download){
         this.context = context;
         this.items = items;
         this.itemNames = itemNames;
         this.price = price;
         this.font = font;
         this.rarity = rarity;
+        this.download = download;
     }
 
     @Override
@@ -140,8 +145,8 @@ public class ItemList extends BaseAdapter {
         itemText.setText(itemNames.get(position));
         itemPrice.setText(price.get(position));
         itemText.setTypeface(font);
-        //new SetImageAsyncTask(position,itemImg).execute();
-
+        String[] split = items.get(position).split("/");
+        Picasso.with(itemImg.getContext()).load("file:///android_asset/a"+split[split.length-2]+".png").into(itemImg);
 
         switch(rarity.get(position)){
             case "legendary":
@@ -165,38 +170,4 @@ public class ItemList extends BaseAdapter {
 
         return v;
     }
-
-    private class SetImageAsyncTask extends AsyncTask<Void, Void, Drawable>{
-        int position;
-        ImageView imageView;
-
-        public SetImageAsyncTask(int position,ImageView imageView){
-            this.position = position;
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected Drawable doInBackground(Void... params) {
-            Context con = imageView.getContext();
-
-            StringBuilder buildSkinName = new StringBuilder();
-            String[] splitSkinName = itemNames.get(position).toLowerCase().split(" ");
-            for(String s : splitSkinName){
-                if(s != splitSkinName[splitSkinName.length-1]) {
-                    buildSkinName.append(s + "_");
-                }else{
-                    buildSkinName.append(s);
-                }
-            }
-
-             return con.getResources().getDrawable(con.getResources().getIdentifier(buildSkinName.toString(),"drawable",con.getPackageName()));
-        }
-
-        @Override
-        protected void onPostExecute(Drawable drawable) {
-            super.onPostExecute(drawable);
-            imageView.setImageDrawable(drawable);
-        }
-    }
-
 }

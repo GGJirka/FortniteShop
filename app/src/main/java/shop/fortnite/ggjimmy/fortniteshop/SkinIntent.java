@@ -70,16 +70,11 @@ public class SkinIntent extends AppCompatActivity {
         }else{
             new JsoupAsyncTask().execute();
         }
-
-
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, String>{
 
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
+
 
         @Override
         protected String doInBackground(Void... params) {

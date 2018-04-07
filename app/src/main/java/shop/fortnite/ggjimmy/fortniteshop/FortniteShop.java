@@ -138,7 +138,7 @@ public class FortniteShop extends AppCompatActivity {
             super.onPostExecute(result);
             try {
                 BaseAdapter adapter = new ItemList(FortniteShop.this, result, itemNames, itemPrice,
-                        Typeface.createFromAsset(getAssets(), "burbank.otf"), rarity);
+                        Typeface.createFromAsset(getAssets(), "burbank.otf"), rarity,false);
                 listOfItems.setAdapter(adapter);
 
                 listOfItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
