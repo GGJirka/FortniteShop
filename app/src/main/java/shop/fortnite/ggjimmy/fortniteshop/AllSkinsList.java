@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.ArrayList;
 
 
 /**
@@ -30,6 +33,8 @@ public class AllSkinsList extends BaseAdapter{
     public static final String OUTFIT_TYPE = "OUTFIT_TYPE";
     public static final String RARITY = "RARITY";
     public static final String PRICE = "PRICE";
+    public ArrayList<Drawable> drawables;
+    public ArrayList<Drawable> drawables2;
     public SkinHolder urls;
     public SkinHolder names;
     public SkinHolder prices;
@@ -38,13 +43,15 @@ public class AllSkinsList extends BaseAdapter{
     public Context context;
 
     public AllSkinsList(Context context, SkinHolder urls, SkinHolder names, SkinHolder prices,
-                        SkinHolder rarity,SkinHolder outfitType){
+                        SkinHolder rarity,SkinHolder outfitType,ArrayList<Drawable> drawables, ArrayList<Drawable> drawables2){
         this.context = context;
         this.urls = urls;
         this.names = names;
         this.prices = prices;
         this.rarity = rarity;
         this.outfitType = outfitType;
+        this.drawables = drawables;
+        this.drawables2 = drawables2;
     }
 
     @Override
@@ -69,8 +76,8 @@ public class AllSkinsList extends BaseAdapter{
              v = View.inflate(this.context, R.layout.skins_layout, null);
 
 
-            ImageView skin1 = (ImageView) v.findViewById(R.id.item_img);
-            ImageView skin2 = (ImageView) v.findViewById(R.id.item_img2);
+            final ImageView skin1 = (ImageView) v.findViewById(R.id.item_img);
+            final ImageView skin2 = (ImageView) v.findViewById(R.id.item_img2);
 
             TextView name1 = (TextView) v.findViewById(R.id.item_name1);
             TextView name2 = (TextView) v.findViewById(R.id.item_name2);
@@ -78,16 +85,16 @@ public class AllSkinsList extends BaseAdapter{
             TextView price1 = (TextView) v.findViewById(R.id.item_price1);
             TextView price2 = (TextView) v.findViewById(R.id.item_price2);
 
-            Drawable vbucksIcon = context.getResources().getDrawable(R.drawable.vbucks_icon);
+            //Drawable vbucksIcon = context.getResources().getDrawable(R.drawable.vbucks_icon);
 
             if (prices.list.get(position).contains(",") || prices.list.get(position).length() < 4) {
                 if (!prices.list.get(position).contains("?")) {
-                    price1.setCompoundDrawablesWithIntrinsicBounds(vbucksIcon, null, null, null);
+                    //price1.setCompoundDrawablesWithIntrinsicBounds(vbucksIcon, null, null, null);
                 }
             }
             if (prices.list2.get(position).contains(",") || prices.list2.get(position).length() < 4) {
                 if (!prices.list2.get(position).contains("?")) {
-                    price2.setCompoundDrawablesWithIntrinsicBounds(vbucksIcon, null, null, null);
+                    //price2.setCompoundDrawablesWithIntrinsicBounds(vbucksIcon, null, null, null);
                 }
             }
             LinearLayout layout1 = (LinearLayout) v.findViewById(R.id.item_layout1);
@@ -106,15 +113,23 @@ public class AllSkinsList extends BaseAdapter{
             setFont(price1);
             setFont(price2);
 
-            /*new DownloadItemImageTask(skin1).execute(urls.list.get(position));
-            new DownloadItemImageTask(skin2).execute(urls.list2.get(position));*/
+            final String[] split = urls.list.get(position).split("/");
+            final String[] split2 = urls.list2.get(position).split("/");
+
+
+            new SetImageAsyncTask(skin1,"a"+split[split.length-2]).execute();
+            new SetImageAsyncTask(skin2,"a"+split2[split2.length-2]).execute();
+
+
             v.setTag(position);
 
         }catch(Exception e){
-
+            Log.e("IMAGE",e.getMessage());
         }
         return v;
     }
+
+
     public void setFont(TextView text){
         text.setTypeface(Typeface.createFromAsset(context.getAssets(),"burbank.otf"));
     }
@@ -179,33 +194,33 @@ public class AllSkinsList extends BaseAdapter{
         }
     }
 
-    private class DownloadItemImageTask extends AsyncTask<String, Void, Bitmap> {
+    private class SetImageAsyncTask extends AsyncTask<Void, Void, Drawable>{
+        ImageView imageView;
+        String name;
 
-        private ImageView img;
-
-        public DownloadItemImageTask(ImageView img){
-            this.img = img;
+        public SetImageAsyncTask(ImageView imageView,String name){
+            this.imageView = imageView;
+            this.name = name;
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {
-            String urls = params[0];
-            Bitmap imageBitmap = null;
-
-            try{
-                InputStream inputStream = new URL(urls).openStream();
-                imageBitmap = BitmapFactory.decodeStream(inputStream);
+        protected Drawable doInBackground(Void... params){
+            int id = 0;
+            try {
+                 id = imageView.getContext().getResources().getIdentifier(name, "drawable", imageView.getContext().getPackageName());
             }catch(Exception e){
-
+                Log.e("POST","exception",e);
             }
-            return imageBitmap;
+            return imageView.getContext().getResources().getDrawable(id);
         }
 
-        protected void onPostExecute(Bitmap result){
+        @Override
+        protected void onPostExecute(Drawable drawable){
+            super.onPostExecute(drawable);
             try {
-                img.setImageBitmap(result);
-            }catch(Exception e){
-
+                imageView.setImageDrawable(drawable);
+            }catch(Exception n){
+                Log.e("POST","exception",n);
             }
         }
     }

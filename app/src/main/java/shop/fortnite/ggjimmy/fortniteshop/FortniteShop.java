@@ -13,6 +13,8 @@ import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -34,7 +36,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class FortniteShop extends AppCompatActivity {
-    public static LruCache<String, Bitmap> mMemoryCache;
+
 
     public static final String INTENT_ID = "SKIN_NAME";
     public static final String OUTFIT_TYPE = "OUTFIT_TYPE";
@@ -61,15 +63,6 @@ public class FortniteShop extends AppCompatActivity {
         outfitType = new ArrayList<>();
         listOfItems = (ListView) findViewById(R.id.items);
 
-        final int maxMemorySize = (int) Runtime.getRuntime().maxMemory() / 1024;
-        final int cacheSize = maxMemorySize /8;
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize){
-
-            @Override
-            public int sizeOf(String key, Bitmap value){
-                return value.getByteCount() / 1024;
-            }
-        };
 
         JsoupAsyncTask asyncTask = new JsoupAsyncTask();
         asyncTask.execute();
@@ -143,61 +136,33 @@ public class FortniteShop extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<String> result){
             super.onPostExecute(result);
+            try {
+                BaseAdapter adapter = new ItemList(FortniteShop.this, result, itemNames, itemPrice,
+                        Typeface.createFromAsset(getAssets(), "burbank.otf"), rarity);
+                listOfItems.setAdapter(adapter);
 
-
-            new DownloadItemImageTask(result,itemNames).execute();
-            BaseAdapter adapter = new ItemList(FortniteShop.this,result,itemNames, itemPrice,
-                    Typeface.createFromAsset(getAssets(),"burbank.otf"), rarity);
-            listOfItems.setAdapter(adapter);
-
-            listOfItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent skinIntent = new Intent(FortniteShop.this,SkinIntent.class);
-                    skinIntent.putExtra(INTENT_ID, itemNames.get(position));
-                    skinIntent.putExtra(OUTFIT_TYPE, rarity.get(position));
-                    skinIntent.putExtra(RARITY, outfitType.get(position));
-                    startActivity(skinIntent);
-                }
-            });
-            adapter.notifyDataSetChanged();
-            ProgressBar loading = (ProgressBar) findViewById(R.id.shop_loading);
-            loading.setVisibility(View.GONE);
-
-            listOfItems.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private class DownloadItemImageTask extends AsyncTask<String, Void, Bitmap>{
-
-        ArrayList<String> urls;
-        ArrayList<String> names;
-
-        public DownloadItemImageTask(ArrayList<String> urls, ArrayList<String> names){
-            this.urls = urls;
-            this.names = names;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            Bitmap imageBitmap = null;
-                try {
-                    for(int i = 0;i < urls.size();i++) {
-                        InputStream inputStream = new URL(urls.get(i)).openStream();
-                        imageBitmap = BitmapFactory.decodeStream(inputStream);
-                        setBitmapToMemoryCache(names.get(i), imageBitmap);
+                listOfItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent skinIntent = new Intent(FortniteShop.this, SkinIntent.class);
+                        skinIntent.putExtra(INTENT_ID, itemNames.get(position));
+                        skinIntent.putExtra(OUTFIT_TYPE, rarity.get(position));
+                        skinIntent.putExtra(RARITY, outfitType.get(position));
+                        startActivity(skinIntent);
                     }
-                } catch (Exception e) {
+                });
+                adapter.notifyDataSetChanged();
+                ProgressBar loading = (ProgressBar) findViewById(R.id.shop_loading);
+                loading.setVisibility(View.GONE);
 
-                }
+                listOfItems.setVisibility(View.VISIBLE);
+            }catch(Exception e){
 
-            return imageBitmap;
-        }
-
-        protected void onPostExecute(Bitmap result){
-
+            }
         }
     }
+
+
     public void onSkinsClick(View v){
         Intent intent = new Intent(FortniteShop.this, AllSkins.class);
         startActivity(intent);
@@ -213,10 +178,22 @@ public class FortniteShop extends AppCompatActivity {
         super.onStop();
     }
 
-    public static Bitmap getBitmapFromMemoryCache(String key){
-        return mMemoryCache.get(key);
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.all_skins_menu,menu);
+        return true;
     }
-    public static void setBitmapToMemoryCache(String key, Bitmap bitmap){
-        mMemoryCache.put(key, bitmap);
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+            switch (item.getItemId()) {
+                case R.id.all_skins_icon:
+                   // onSkinsClick();
+                    break;
+
+            }
+        return true;
     }
 }

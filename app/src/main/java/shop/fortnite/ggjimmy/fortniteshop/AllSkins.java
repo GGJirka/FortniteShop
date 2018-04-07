@@ -1,21 +1,26 @@
 package shop.fortnite.ggjimmy.fortniteshop;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.LruCache;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -23,10 +28,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.io.IOException;
+
+import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class AllSkins extends AppCompatActivity {
+
+    public static LruCache<String, Bitmap> mMemoryCache;
+    public ArrayList<Drawable> drawables;
+    public ArrayList<Drawable> drawables2;
     public MaterialSearchView search;
     public ListView listView;
     public SkinHolder urls;
@@ -39,6 +51,11 @@ public class AllSkins extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
+            public void uncaughtException(Thread paramThread, Throwable paramThrowable){
+                Log.e("error"+Thread.currentThread().getStackTrace()[2],paramThrowable.getLocalizedMessage());
+            }
+        });
         setContentView(R.layout.activity_all_skins);
         Toolbar toolbar = (Toolbar) findViewById(R.id.skins_toolbar);
         setSupportActionBar(toolbar);
@@ -56,6 +73,17 @@ public class AllSkins extends AppCompatActivity {
         prices = new SkinHolder();
         rarity = new SkinHolder();
         outfitType = new SkinHolder();
+        drawables = new ArrayList<>();
+
+        final int maxMemorySize = (int) Runtime.getRuntime().maxMemory() / 1024;
+        final int cacheSize = maxMemorySize;
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize){
+
+            @Override
+            public int sizeOf(String key, Bitmap value){
+                return value.getByteCount() / 1024;
+            }
+        };
 
         try {
             new JsoupAsyncTask().execute();
@@ -150,8 +178,64 @@ public class AllSkins extends AppCompatActivity {
                 urls.list.remove(urls.list.size() - i);
             }
         }
-        adapter = new AllSkinsList(AllSkins.this, urls, names, prices, rarity,outfitType);
+        /*for(int i=0;i<names.list.size();i++){
+            String name = names.list.get(i);
+
+            String[] splitName = name.split("/");
+
+            drawables.add(getResources().getDrawable(R.drawable.a5ab155400585dc38d8138e51));
+            new SetImageAsyncTask("a"+splitName[splitName.length-2], drawables).execute();
+        }*/
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+        adapter = new AllSkinsList(AllSkins.this, urls, names, prices, rarity,outfitType, drawables, drawables2);
         listView.setAdapter(adapter);
+    }
+    private class TestAsync extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
+    }
+
+    private class SetImageAsyncTask extends AsyncTask<Void, Void, Drawable>{
+        String name;
+        ArrayList<Drawable> skins;
+
+        public SetImageAsyncTask(String name, ArrayList<Drawable> drawables){
+            this.name = name;
+            this.skins = drawables;
+        }
+
+        @Override
+        protected Drawable doInBackground(Void... params) {
+            int id = 0;
+            try {
+                 id = getApplicationContext().getResources().getIdentifier(name, "drawable", getApplicationContext().getPackageName());
+                //int id2 = getApplicationContext().getResources().getIdentifier(name2, "drawable", getApplicationContext().getPackageName());
+                //skins.add(getApplicationContext().getResources().getDrawable(id));
+                //skins.add(getApplicationContext().getResources().getDrawable(id2));
+            }catch(Exception e){
+                Log.e("POST","exception",e);
+            }
+            return getApplicationContext().getResources().getDrawable(id);
+        }
+
+        @Override
+        protected void onPostExecute(Drawable drawable) {
+            super.onPostExecute(drawable);
+            try {
+                drawables.add(drawable);
+            }catch(Exception n){
+                Log.e("POST","exception",n);
+            }
+        }
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, ArrayList<String>>{
@@ -244,9 +328,19 @@ public class AllSkins extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> result){
             try {
                 setType("outfit");
-            }catch(Exception e){
+            } catch (Exception e) {
 
             }
         }
     }
+
+
+    public static Bitmap getBitmapFromMemoryCache(String key){
+        return mMemoryCache.get(key);
+    }
+
+    public static void setBitmapToMemoryCache(String key, Bitmap bitmap){
+        mMemoryCache.put(key, bitmap);
+    }
+
 }

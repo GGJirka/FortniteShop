@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
@@ -139,12 +140,9 @@ public class ItemList extends BaseAdapter {
         itemText.setText(itemNames.get(position));
         itemPrice.setText(price.get(position));
         itemText.setTypeface(font);
+        //new SetImageAsyncTask(position,itemImg).execute();
 
 
-        if(position ==0 || position == 1){
-            new DownloadItemImageTask(itemImg).execute(items.get(position));
-        }
-        itemImg.setImageBitmap(FortniteShop.getBitmapFromMemoryCache(itemNames.get(position)));
         switch(rarity.get(position)){
             case "legendary":
                 linearLayout.setBackgroundResource(R.drawable.legendary_onclick);
@@ -168,26 +166,37 @@ public class ItemList extends BaseAdapter {
         return v;
     }
 
-    private class DownloadItemImageTask extends AsyncTask<String, Void, Bitmap>{
-        public ImageView itemImg;
+    private class SetImageAsyncTask extends AsyncTask<Void, Void, Drawable>{
+        int position;
+        ImageView imageView;
 
-        public DownloadItemImageTask(ImageView view){
-            this.itemImg = view;
+        public SetImageAsyncTask(int position,ImageView imageView){
+            this.position = position;
+            this.imageView = imageView;
         }
+
         @Override
-        protected Bitmap doInBackground(String... params)   {
-            Bitmap imageBitmap = null;
-                try {
-                    InputStream inputStream = new URL(params[0]).openStream();
-                    imageBitmap = BitmapFactory.decodeStream(inputStream);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        protected Drawable doInBackground(Void... params) {
+            Context con = imageView.getContext();
+
+            StringBuilder buildSkinName = new StringBuilder();
+            String[] splitSkinName = itemNames.get(position).toLowerCase().split(" ");
+            for(String s : splitSkinName){
+                if(s != splitSkinName[splitSkinName.length-1]) {
+                    buildSkinName.append(s + "_");
+                }else{
+                    buildSkinName.append(s);
                 }
-            return imageBitmap;
+            }
+
+             return con.getResources().getDrawable(con.getResources().getIdentifier(buildSkinName.toString(),"drawable",con.getPackageName()));
         }
 
-        protected void onPostExecute(Bitmap result){
-            itemImg.setImageBitmap(result);
+        @Override
+        protected void onPostExecute(Drawable drawable) {
+            super.onPostExecute(drawable);
+            imageView.setImageDrawable(drawable);
         }
     }
+
 }
