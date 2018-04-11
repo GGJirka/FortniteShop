@@ -40,11 +40,24 @@
             app:searchCloseIcon="@drawable/close_icon"
             android:textColorHint="#FFF"/>
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/all_skins_list_view"
-            android:layout_marginTop="70sp"
-            android:divider="@color/mainBackground"/>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/all_skins_list_view"
+                android:layout_marginTop="70sp"
+                android:layout_marginBottom="40sp"
+                android:divider="@color/mainBackground"/>
+
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/all_skins_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="ca-app-pub-5090360471586053/4083206432">
+            </com.google.android.gms.ads.AdView>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

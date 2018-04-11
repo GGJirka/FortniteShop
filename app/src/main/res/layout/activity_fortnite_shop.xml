@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_fortnite_shop"
     android:layout_width="match_parent"
     android:background="@color/mainBackground"
     android:layout_height="match_parent"
     tools:context="shop.fortnite.ggjimmy.fortniteshop.FortniteShop">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,6 +30,7 @@
         android:divider="@color/mainBackground"
         android:layout_below="@+id/bar_layout"
         android:visibility="invisible"
+        android:layout_marginBottom="20sp"
         android:choiceMode="singleChoice"/>
 
     <android.support.design.widget.AppBarLayout
@@ -41,7 +45,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:weightSum="1">
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -49,14 +53,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/all_skins_icon"
-                    android:onClick="onSkinsClick"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="14dp"
-                    android:layout_marginEnd="14dp"
-                    android:id="@+id/imageView" />
-
+                    android:id="@+id/imageView2"
+                    android:layout_marginTop="20sp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -64,11 +62,12 @@
                     android:text="ITEM SHOP"
                     android:paddingTop="10sp"
                     android:paddingBottom="10sp"
+                    android:layout_alignRight="@+id/imageView2"
                     android:id="@+id/main_title"
-                    android:layout_marginRight="18dp"
                     android:gravity="center"
                     android:textColor="@color/transparentwhite" />
-            </RelativeLayout>
+
+            </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -83,5 +82,5 @@
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-5090360471586053/7652355747">
     </com.google.android.gms.ads.AdView>
-
 </RelativeLayout>
+</android.support.v4.widget.DrawerLayout>

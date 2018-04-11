@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5sp"
+        android:background="@color/backgroundBlack"
+        android:id="@+id/wishlist_list_mainlayout">
+        <RelativeLayout
+            android:id="@+id/wishlist_list_layout_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp">
+        <ImageView
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:id="@+id/wishlist_list_image"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp">
+            <TextView
+                android:layout_width="180sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/wishlist_list_skinname"
+                android:textColor="@color/transparentwhite"
+                android:textSize="25sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wishlist_list_skinprice"
+                android:textSize="22sp"
+                android:textColor="@color/transparentwhite"
+                android:drawableLeft="@drawable/vbucks_mini"/>
+        </LinearLayout>
+
+    </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="130sp"
+            android:src="@drawable/close_icon"
+            android:layout_marginRight="20sp"
+            android:id="@+id/imageView"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</LinearLayout>

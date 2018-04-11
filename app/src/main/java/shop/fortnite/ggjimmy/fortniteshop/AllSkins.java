@@ -23,6 +23,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,7 +40,6 @@ import java.util.ArrayList;
 
 public class AllSkins extends AppCompatActivity {
 
-    public static LruCache<String, Bitmap> mMemoryCache;
     public ArrayList<Drawable> drawables;
     public ArrayList<Drawable> drawables2;
     public MaterialSearchView search;
@@ -47,6 +50,7 @@ public class AllSkins extends AppCompatActivity {
     public SkinHolder rarity;
     public SkinHolder outfitType;
     public BaseAdapter adapter;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +79,15 @@ public class AllSkins extends AppCompatActivity {
         outfitType = new SkinHolder();
         drawables = new ArrayList<>();
 
-        final int maxMemorySize = (int) Runtime.getRuntime().maxMemory() / 1024;
-        final int cacheSize = maxMemorySize;
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize){
-
-            @Override
-            public int sizeOf(String key, Bitmap value){
-                return value.getByteCount() / 1024;
-            }
-        };
+        MobileAds.initialize(this, "ca-app-pub-5090360471586053~9240769580");
+        adView = (AdView) findViewById(R.id.all_skins_banner);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         try {
             new JsoupAsyncTask().execute();
             setType("outfit");
         }catch(Exception e){}
-
     }
 
     @Override
@@ -173,7 +171,7 @@ public class AllSkins extends AppCompatActivity {
                 }
             }
         }
-        if(type.equals("emote")) {
+        if(type.equals("emote") || type.equals("pickaxe")) {
             for (int i = 5; i > 0; i--) {
                 urls.list.remove(urls.list.size() - i);
             }
@@ -277,15 +275,6 @@ public class AllSkins extends AppCompatActivity {
 
             }
         }
-    }
-
-
-    public static Bitmap getBitmapFromMemoryCache(String key){
-        return mMemoryCache.get(key);
-    }
-
-    public static void setBitmapToMemoryCache(String key, Bitmap bitmap){
-        mMemoryCache.put(key, bitmap);
     }
 
 }

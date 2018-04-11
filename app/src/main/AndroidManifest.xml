@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="shop.fortnite.ggjimmy.fortniteshop">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -11,7 +11,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FortniteShop">
+        <activity
+            android:name=".FortniteShop"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,8 +32,17 @@
             android:name=".SkinIntent"
             android:label="@string/title_activity_skin_intent"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AllSkins"
-            android:theme="@style/MenuBackground"/>
+        <activity
+            android:name=".AllSkins"
+            android:theme="@style/MenuBackground" />
+        <activity
+            android:name=".Wishlist"
+            android:label="@string/title_activity_wishlist"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_all_items"
+            android:title="All Items" />
+        <item
+            android:id="@+id/drawer_wishlist"
+            android:title="Wishlist" />
+        <item
+            android:id="@+id/drawer_options"
+            android:title="Options" />
+    </group>
+
+    <item android:title="Contact">
+        <menu>
+            <item
+                android:id="@+id/drawer_send_message"
+                android:title="Feedback" />
+            <item
+                android:id="@+id/nav_send"
+                android:title="Rate"/>
+        </menu>
+    </item>
+
+</menu>

@@ -2,6 +2,7 @@ package shop.fortnite.ggjimmy.fortniteshop;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -16,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +25,8 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -30,7 +34,7 @@ import java.util.ArrayList;
  */
 
 public class AllSkinsList extends BaseAdapter{
-
+    public SharedPreferences.Editor prefs;
     public static final String INTENT_ID = "SKIN_NAME";
     public static final String OUTFIT_TYPE = "OUTFIT_TYPE";
     public static final String RARITY = "RARITY";
@@ -54,6 +58,7 @@ public class AllSkinsList extends BaseAdapter{
         this.outfitType = outfitType;
         this.drawables = drawables;
         this.drawables2 = drawables2;
+        prefs = context.getSharedPreferences("fshop.wishlist", Context.MODE_PRIVATE).edit();
     }
 
     @Override
@@ -152,7 +157,43 @@ public class AllSkinsList extends BaseAdapter{
                     break;
             }
 
-            layout.setOnClickListener(new View.OnClickListener() {
+            layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Set<String> set = new HashSet<>();
+                    ArrayList<String> data = new ArrayList<>();
+
+                    if(index == 1) {
+                        if(prices.list.get(position).startsWith("1") || prices.list.get(position).startsWith("2")
+                                || prices.list.get(position).startsWith("8") || prices.list.get(position).startsWith("5")) {
+                            data.add(names.list.get(position));
+                            data.add(prices.list.get(position));
+                            data.add(rarity.list.get(position));
+                            String[] split = urls.list.get(position).split("/");
+                            data.add(split[split.length - 2]);
+                            set.addAll(data);
+                            prefs.putStringSet(names.list.get(position), set);
+                            prefs.apply();
+                        }
+                    }else{
+                        if(prices.list2.get(position).startsWith("1") || prices.list2.get(position).startsWith("2")
+                                || prices.list2.get(position).startsWith("8") || prices.list2.get(position).startsWith("5")) {
+                            data.add(names.list2.get(position));
+                            data.add(prices.list2.get(position));
+                            data.add(rarity.list2.get(position));
+                            String[] split = urls.list2.get(position).split("/");
+                            data.add(split[split.length - 2]);
+                            set.addAll(data);
+                            prefs.putStringSet(names.list2.get(position), set);
+                            prefs.apply();
+                        }
+                    }
+                    Toast.makeText(context,"Added to wishlist",Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+
+            layout.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     switch (rarita) {
@@ -172,6 +213,7 @@ public class AllSkinsList extends BaseAdapter{
                             layout.setBackgroundResource(R.drawable.uncommon_selected);
                             break;
                     }
+
                     Intent skinIntent = new Intent(context, SkinIntent.class);
                     if (index == 1) {
                         skinIntent.putExtra(INTENT_ID, names.list.get(position));
@@ -190,23 +232,5 @@ public class AllSkinsList extends BaseAdapter{
         }catch(Exception e){
 
         }
-    }
-
-    private class SetImageAsyncTask extends AsyncTask<Void, Void, Void>{
-        ImageView imageView;
-        String name;
-
-        public SetImageAsyncTask(ImageView imageView,String name){
-            this.imageView = imageView;
-            this.name = name;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params){
-            Picasso.with(imageView.getContext()).load(name).into(imageView);
-            return null;
-        }
-
-
     }
 }
