@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/alllskins_favorites"
+        app:showAsAction="always"
+        android:title="wishlist"
+        android:icon="@drawable/wishlist_icon"/>
+
     <group android:id="@+id/group"
         android:checkableBehavior="single">
         <item
@@ -24,4 +31,5 @@
             android:title="Emotes"
             />
     </group>
+
 </menu>

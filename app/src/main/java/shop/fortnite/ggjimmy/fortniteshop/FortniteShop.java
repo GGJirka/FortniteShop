@@ -46,7 +46,7 @@ public class FortniteShop extends AppCompatActivity
     public String URL = "https://fnbr.co/shop";
     public ListView listOfItems;
     private AdView mAdView;
-    public DrawerLayout drawer;
+    //public DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class FortniteShop extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -65,7 +65,7 @@ public class FortniteShop extends AppCompatActivity
         toggle.setDrawerIndicatorEnabled(false);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);*/
         urls = new ArrayList<>();
         itemNames = new ArrayList<>();
         itemPrice = new ArrayList<>();
@@ -96,19 +96,19 @@ public class FortniteShop extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
     public void  manageDrawView(View v){
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+       /* if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }else{
             drawer.openDrawer(GravityCompat.START);
-        }
+        }*/
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, ArrayList<String>> {

@@ -1,6 +1,7 @@
 package shop.fortnite.ggjimmy.fortniteshop;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ public class WishlistAdapter extends BaseAdapter {
 
     public ArrayList<Set<String>> items;
     public Context context;
+    public SharedPreferences.Editor prefs;
+    public String name;
 
     public WishlistAdapter(Context context, ArrayList<Set<String>> items){
         this.context = context;
@@ -45,13 +48,14 @@ public class WishlistAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View v = View.inflate(this.context, R.layout.wishlist_list, null);
+        prefs = context.getSharedPreferences("fshop.wishlist", Context.MODE_PRIVATE).edit();
+
         Set<String> set = items.get(position);
-        String name = "";
         String price = "";
-        String url = "";
         String rarity = "";
+        String url="";
         for(Iterator<String> it = set.iterator();it.hasNext();){
             String data = it.next();
             if(data.startsWith("5a")){
@@ -75,7 +79,16 @@ public class WishlistAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) v.findViewById(R.id.wishlist_list_image);
         Picasso.with(imageView.getContext()).load("file:///android_asset/a"+url+".png").into(imageView);
         RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.wishlist_list_layout_image);
-
+        ImageView remove = (ImageView) v.findViewById(R.id.wishlist_remove);
+        remove.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                prefs.remove(name);
+                prefs.apply();
+                items.remove(position);
+                notifyDataSetChanged();
+            }
+        });
         switch (rarity) {
             case "legendary":
                 layout.setBackgroundResource(R.drawable.wishlist_legendary);
@@ -95,4 +108,5 @@ public class WishlistAdapter extends BaseAdapter {
         }
         return v;
     }
+
 }
