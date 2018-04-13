@@ -16,8 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:id="@+id/skin_loading"
-            />
+            android:id="@+id/skin_loading" />
 
     </RelativeLayout>
 
@@ -60,6 +59,8 @@
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+
 </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

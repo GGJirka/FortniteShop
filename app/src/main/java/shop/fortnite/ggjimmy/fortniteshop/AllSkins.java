@@ -34,6 +34,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.net.URL;
@@ -116,8 +117,8 @@ public class AllSkins extends AppCompatActivity {
                 case android.R.id.home:
                     this.finish();
                     break;
-                case R.id.alllskins_favorites:
-                    startActivity(new Intent(AllSkins.this, Wishlist.class));
+                /*case R.id.alllskins_favorites:
+                    startActivity(new Intent(AllSkins.this, Wishlist.class));*/
                 case R.id.sort_outfit:
                     setType("outfit");
                     item.setChecked(true);
@@ -140,7 +141,7 @@ public class AllSkins extends AppCompatActivity {
         return true;
     }
 
-    public void setType(String type) throws Exception{
+    public void setType(String type) {
         SkinHolder urls = new SkinHolder();
         SkinHolder names = new SkinHolder();
         SkinHolder prices = new SkinHolder();
@@ -194,75 +195,82 @@ public class AllSkins extends AppCompatActivity {
                 int pricesCount = 0;
                 int rarityCount = 0;
                 int outfitCount = 0;
+                int i = 0;
                 for(Element div : elements){
-                    if(div.attr("class").equals("row items-display")){
-                        Elements items = div.getAllElements();
-                        String s="";
-                        String common = "";
-                        for(Element item : items){
-                            if (item.attr("class").contains("card splash-card")) {
-                                String[] split = item.attr("class").split("-");
-                                common = split[split.length-1];
-                            }
+                    //if(div.text().equals("All Items")){
+                    if(div.attr("class").equals("row")){
+                        if(i ==1) {
+                            Elements items = div.getAllElements();
+                            String s = "";
+                            String common = "";
+                            for (Element item : items) {
+                                if (item.attr("class").contains("card splash-card")) {
+                                    String[] split = item.attr("class").split("-");
+                                    common = split[split.length - 1];
+                                }
 
-                            if(item.attr("class").contains("card-img-top")){
-                                String[] split = item.attr("class").split(" ");
-                                s = split[split.length-1];
-                            }
+                                if (item.attr("class").contains("card-img-top")) {
+                                    String[] split = item.attr("class").split(" ");
+                                    s = split[split.length - 1];
+                                }
 
-                            if(!s.equals("backpack") && !s.equals("loading") && !s.equals("emoji") && !s.equals("skydive")) {
-                                if(!common.equals("common")) {
-                                    if (item.attr("class").equals("card-text itemprice")) {
-                                        if (pricesCount % 2 == 0) {
-                                            prices.list.add(item.text());
-                                        } else {
-                                            prices.list2.add(item.text());
+                                if (!s.equals("backpack") && !s.equals("loading") && !s.equals("emoji") && !s.equals("skydive")) {
+                                    if (!common.equals("common")) {
+                                        if (item.attr("class").equals("card-text itemprice")) {
+                                            if (pricesCount % 2 == 0) {
+                                                prices.list.add(item.text());
+                                            } else {
+                                                prices.list2.add(item.text());
+                                            }
+                                            pricesCount++;
                                         }
-                                        pricesCount++;
-                                    }
 
-                                    if (item.attr("data-src") != "") {
-                                        if (urlsCount % 2 == 0) {
-                                            urls.list.add(item.attr("data-src"));
-                                        } else {
-                                            urls.list2.add(item.attr("data-src"));
+                                        if (item.attr("data-src") != "") {
+                                            if (urlsCount % 2 == 0) {
+                                                urls.list.add(item.attr("data-src"));
+                                            } else {
+                                                urls.list2.add(item.attr("data-src"));
+                                            }
+                                            urlsCount++;
                                         }
-                                        urlsCount++;
-                                    }
-                                    if (item.attr("class").equals("card-title itemname")) {
-                                        if (namesCount % 2 == 0) {
-                                            names.list.add(item.text());
-                                        } else {
-                                            names.list2.add(item.text());
+                                        if (item.attr("class").equals("card-title itemname")) {
+                                            if (namesCount % 2 == 0) {
+                                                names.list.add(item.text());
+                                            } else {
+                                                names.list2.add(item.text());
+                                            }
+                                            namesCount++;
                                         }
-                                        namesCount++;
-                                    }
 
-                                    if (item.attr("class").contains("card splash-card")) {
-                                        String[] split = item.attr("class").split("-");
-                                        if (rarityCount % 2 == 0) {
-                                            rarity.list.add(split[split.length - 1]);
-                                        } else {
-                                            rarity.list2.add(split[split.length - 1]);
+                                        if (item.attr("class").contains("card splash-card")) {
+                                            String[] split = item.attr("class").split("-");
+                                            if (rarityCount % 2 == 0) {
+                                                rarity.list.add(split[split.length - 1]);
+                                            } else {
+                                                rarity.list2.add(split[split.length - 1]);
+                                            }
+                                            rarityCount++;
                                         }
-                                        rarityCount++;
-                                    }
 
-                                    if (item.attr("class").contains("card-img-top")) {
-                                        String[] split = item.attr("class").split(" ");
-                                        if (outfitCount % 2 == 0) {
-                                            outfitType.list.add(split[split.length - 1]);
-                                        } else {
-                                            outfitType.list2.add(split[split.length - 1]);
+                                        if (item.attr("class").contains("card-img-top")) {
+                                            String[] split = item.attr("class").split(" ");
+                                            if (outfitCount % 2 == 0) {
+                                                outfitType.list.add(split[split.length - 1]);
+                                            } else {
+                                                outfitType.list2.add(split[split.length - 1]);
+                                            }
+                                            outfitCount++;
                                         }
-                                        outfitCount++;
                                     }
                                 }
+                                // }
                             }
                         }
-                    }
+                        i++;
                 }
-            }catch(Exception e){
+
+                }
+            }catch(IOException e){
 
             }
             return urls.list;

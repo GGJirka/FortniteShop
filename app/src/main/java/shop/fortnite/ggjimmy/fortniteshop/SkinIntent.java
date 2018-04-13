@@ -3,6 +3,7 @@ package shop.fortnite.ggjimmy.fortniteshop;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,7 +38,7 @@ public class SkinIntent extends AppCompatActivity {
     public static final String PRICE = "PRICE";
     public LinearLayout layout;
     public String skinName;
-    public DrawView skin;
+    public ImageView skin;
     public String outfitType;
     public String rarity;
     public String price;
@@ -80,7 +82,7 @@ public class SkinIntent extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             Document d = null;
             try{
-                d = Jsoup.connect("https://fnbr.co/gallery").get();
+                d = Jsoup.connect("https://fnbr.co/png").get();
                 Elements elements = d.getAllElements();
 
                 for(Element image : elements){
@@ -134,21 +136,33 @@ public class SkinIntent extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result){
             hideLoading();
-            skin = new DrawView(SkinIntent.this,outfitType, price);
+            skin = new ImageView(SkinIntent.this);
 
             skin.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
-            skin.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            if(rarity.toLowerCase().equals("outfit")) {
+                skin.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+            switch(outfitType) {
+                case "legendary":
+                    layout.setBackgroundColor(Color.parseColor("#ac592f"));
+                    break;
+                case "epic":
+                    layout.setBackgroundColor(Color.parseColor("#833ca4"));
+                    break;
+                case "rare":
+                    layout.setBackgroundColor(Color.parseColor("#2474b1"));
+                    break;
+                case "uncommon":
+                    layout.setBackgroundColor(Color.parseColor("#1c8b2f"));
+                    break;
 
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int width = displayMetrics.widthPixels;
-            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) skin.getLayoutParams();
-            params.width = (int) (width*1.02);
-            skin.setLayoutParams(params);
+            }
             skin.setImageBitmap(result);
+            /*VideoView v = (VideoView) findViewById(R.id.video);
+            v.setVideoPath("https://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4");
+            v.start();*/
             layout.addView(skin);
         }
     }

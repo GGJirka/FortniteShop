@@ -20,6 +20,7 @@ public class Wishlist extends AppCompatActivity {
     public SharedPreferences prefs;
     public ListView listView;
     public ArrayList<Set<String>> skinNames;
+    public ArrayList<String> key;
     public BaseAdapter adapter;
 
     @Override
@@ -41,11 +42,12 @@ public class Wishlist extends AppCompatActivity {
 
             for (Map.Entry<String, ?> entry : allEntries.entrySet()){
                 skinNames.add(prefs.getStringSet(entry.getKey().toString(),null));
+                //key.add(entry.getKey().toString());
             }
         }catch(Exception e){
 
         }
-        adapter = new WishlistAdapter(Wishlist.this, skinNames);
+        adapter = new WishlistAdapter(Wishlist.this, skinNames,key);
         listView.setAdapter(adapter);
 
     }

@@ -19,7 +19,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -43,6 +45,7 @@ public class FortniteShop extends AppCompatActivity
     public ArrayList<String> rarity;
     public ArrayList<String> outfitType;
     public Document document;
+
     public String URL = "https://fnbr.co/shop";
     public ListView listOfItems;
     private AdView mAdView;
@@ -165,17 +168,21 @@ public class FortniteShop extends AppCompatActivity
             super.onPostExecute(result);
             try {
                 BaseAdapter adapter = new ItemList(FortniteShop.this, result, itemNames, itemPrice,
-                        Typeface.createFromAsset(getAssets(), "burbank.otf"), rarity,false);
+                        Typeface.createFromAsset(getAssets(), "burbank.otf"), rarity,outfitType,false);
                 listOfItems.setAdapter(adapter);
 
                 listOfItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent skinIntent = new Intent(FortniteShop.this, SkinIntent.class);
-                        skinIntent.putExtra(INTENT_ID, itemNames.get(position));
-                        skinIntent.putExtra(OUTFIT_TYPE, rarity.get(position));
-                        skinIntent.putExtra(RARITY, outfitType.get(position));
-                        startActivity(skinIntent);
+                        //String[] split = urls.get(position).split("/");
+                       // Toast.makeText(getApplicationContext(),outfitType.get(position),Toast.LENGTH_SHORT).show();
+                        if(!outfitType.get(position).equals("misc") && !outfitType.get(position).equals("backpack")) {
+                            Intent skinIntent = new Intent(FortniteShop.this, SkinIntent.class);
+                            skinIntent.putExtra(INTENT_ID, itemNames.get(position));
+                            skinIntent.putExtra(OUTFIT_TYPE, rarity.get(position));
+                            skinIntent.putExtra(RARITY, outfitType.get(position));
+                            startActivity(skinIntent);
+                        }
                     }
                 });
                 adapter.notifyDataSetChanged();

@@ -45,6 +45,7 @@ public class ItemList extends BaseAdapter {
     public ArrayList<Bitmap> bitmaps;
     public ArrayList<String> itemNames;
     public ArrayList<String> price;
+    public ArrayList<String> outfitType;
     public ImageView itemImg;
     public TextView itemText;
     public TextView itemPrice;
@@ -53,7 +54,7 @@ public class ItemList extends BaseAdapter {
     public boolean download;
 
     public ItemList(Context context, ArrayList<String> items, ArrayList<String> itemNames, ArrayList<String> price,
-                    Typeface font, ArrayList<String> rarity, boolean download){
+                    Typeface font, ArrayList<String> rarity,ArrayList<String> outfitType, boolean download){
         this.context = context;
         this.items = items;
         this.itemNames = itemNames;
@@ -61,6 +62,7 @@ public class ItemList extends BaseAdapter {
         this.font = font;
         this.rarity = rarity;
         this.download = download;
+        this.outfitType = outfitType;
     }
 
     @Override
@@ -93,23 +95,16 @@ public class ItemList extends BaseAdapter {
         String dateAsString = outputFmt.format(time);
         String[] data = dateAsString.split(":");
 
-        if(position == 0){
-            TextView featured = (TextView) v.findViewById(R.id.featured_item);
-            featured.setTextSize(32);
-            featured.setTypeface(font);
-            featured.setVisibility(View.VISIBLE);
-        }
 
         final int hours = 24-calendar.get(Calendar.HOUR_OF_DAY)-1;
         final int minutes = 60-Integer.parseInt(data[1])-1;
         final int seconds = 60-Integer.parseInt(data[2]);
         final int millis = (hours*60*60 + minutes*60+seconds)*1000;
 
-        if(position == this.itemNames.size()-7){
-
+        if(position == 0){
             final TextView dailyItems = (TextView) v.findViewById(R.id.daily_item);
             final TextView dailyTimes = (TextView) v.findViewById(R.id.daily_time);
-            final LinearLayout daily = (LinearLayout) v.findViewById(R.id.featured);
+            final LinearLayout daily = (LinearLayout) v.findViewById(R.id.featured_items);
             dailyItems.setText("DAILY ITEMS");
             dailyItems.setTypeface(font);
             dailyTimes.setTypeface(font);
@@ -147,6 +142,12 @@ public class ItemList extends BaseAdapter {
         itemText.setTypeface(font);
         String[] split = items.get(position).split("/");
         Picasso.with(itemImg.getContext()).load("file:///android_asset/a"+split[split.length-2]+".png").into(itemImg);
+
+        /*if(itemImg.getDrawable() == null){
+            if(itemImg.getContext().) {
+                Picasso.with(itemImg.getContext()).load(items.get(position)).into(itemImg);
+            }
+        }*/
 
         switch(rarity.get(position)){
             case "legendary":

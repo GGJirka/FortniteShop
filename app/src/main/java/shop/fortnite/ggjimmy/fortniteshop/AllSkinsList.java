@@ -157,7 +157,7 @@ public class AllSkinsList extends BaseAdapter{
                     break;
             }
 
-            layout.setOnLongClickListener(new View.OnLongClickListener() {
+            /*layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     Set<String> set = new HashSet<>();
@@ -172,7 +172,7 @@ public class AllSkinsList extends BaseAdapter{
                             String[] split = urls.list.get(position).split("/");
                             data.add(split[split.length - 2]);
                             set.addAll(data);
-                            prefs.putStringSet(names.list.get(position), set);
+                            prefs.putStringSet(split[split.length-2], set);
                             prefs.apply();
                         }
                     }else{
@@ -184,14 +184,14 @@ public class AllSkinsList extends BaseAdapter{
                             String[] split = urls.list2.get(position).split("/");
                             data.add(split[split.length - 2]);
                             set.addAll(data);
-                            prefs.putStringSet(names.list2.get(position), set);
+                            prefs.putStringSet(split[split.length-2], set);
                             prefs.apply();
                         }
                     }
                     Toast.makeText(context,"Added to wishlist",Toast.LENGTH_SHORT).show();
                     return false;
                 }
-            });
+            });*/
 
             layout.setOnClickListener(new View.OnClickListener(){
                 @Override

@@ -26,10 +26,13 @@ public class WishlistAdapter extends BaseAdapter {
     public Context context;
     public SharedPreferences.Editor prefs;
     public String name;
+    public String url;
+    public ArrayList<String> key;
 
-    public WishlistAdapter(Context context, ArrayList<Set<String>> items){
+    public WishlistAdapter(Context context, ArrayList<Set<String>> items, ArrayList<String> key){
         this.context = context;
         this.items = items;
+        this.key = key;
     }
 
     @Override
@@ -51,11 +54,9 @@ public class WishlistAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View v = View.inflate(this.context, R.layout.wishlist_list, null);
         prefs = context.getSharedPreferences("fshop.wishlist", Context.MODE_PRIVATE).edit();
-
         Set<String> set = items.get(position);
         String price = "";
         String rarity = "";
-        String url="";
         for(Iterator<String> it = set.iterator();it.hasNext();){
             String data = it.next();
             if(data.startsWith("5a")){
@@ -83,10 +84,10 @@ public class WishlistAdapter extends BaseAdapter {
         remove.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                prefs.remove(name);
+                /*prefs.remove(prefs);
                 prefs.apply();
-                items.remove(position);
-                notifyDataSetChanged();
+                items.remove();
+                notifyDataSetChanged();*/
             }
         });
         switch (rarity) {

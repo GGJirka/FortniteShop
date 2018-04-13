@@ -7,8 +7,8 @@ android {
         applicationId "shop.fortnite.ggjimmy.fortniteshop"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.8"
+        versionCode 14
+        versionName "1.9.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,6 +26,7 @@ dependencies {
     })
     compile project(':jsoup-1.11.2')
     compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.android.volley:volley:1.1.0'
     compile 'com.google.android.gms:play-services-ads:9.8.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.google.android.gms:play-services-appindexing:9.8.0'
