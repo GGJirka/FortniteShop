@@ -84,10 +84,9 @@ public class WishlistAdapter extends BaseAdapter {
         remove.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                /*prefs.remove(prefs);
-                prefs.apply();
-                items.remove();
-                notifyDataSetChanged();*/
+                prefs.remove(key.get(position)).commit();
+                items.remove(position);
+                notifyDataSetChanged();
             }
         });
         switch (rarity) {

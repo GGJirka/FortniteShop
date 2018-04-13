@@ -117,8 +117,8 @@ public class AllSkins extends AppCompatActivity {
                 case android.R.id.home:
                     this.finish();
                     break;
-                /*case R.id.alllskins_favorites:
-                    startActivity(new Intent(AllSkins.this, Wishlist.class));*/
+                case R.id.alllskins_favorites:
+                    startActivity(new Intent(AllSkins.this, Wishlist.class));
                 case R.id.sort_outfit:
                     setType("outfit");
                     item.setChecked(true);

@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -35,21 +37,29 @@ public class Wishlist extends AppCompatActivity {
         title.setText("Wishlist");
         title.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(),"burbank.otf"));
         skinNames = new ArrayList<>();
+        key = new ArrayList<>();
         listView = (ListView) findViewById(R.id.wishlist_listview);
         try {
             prefs = getSharedPreferences("fshop.wishlist", Context.MODE_PRIVATE);
             Map<String, ?> allEntries = prefs.getAll();
 
             for (Map.Entry<String, ?> entry : allEntries.entrySet()){
-                skinNames.add(prefs.getStringSet(entry.getKey().toString(),null));
-                //key.add(entry.getKey().toString());
+                String s = entry.getKey();
+                skinNames.add(prefs.getStringSet(s,null));
+                key.add(s);
             }
         }catch(Exception e){
 
         }
         adapter = new WishlistAdapter(Wishlist.this, skinNames,key);
-        listView.setAdapter(adapter);
 
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),skinNames.get(position).toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

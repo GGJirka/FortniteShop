@@ -157,7 +157,7 @@ public class AllSkinsList extends BaseAdapter{
                     break;
             }
 
-            /*layout.setOnLongClickListener(new View.OnLongClickListener() {
+            layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     Set<String> set = new HashSet<>();
@@ -191,7 +191,7 @@ public class AllSkinsList extends BaseAdapter{
                     Toast.makeText(context,"Added to wishlist",Toast.LENGTH_SHORT).show();
                     return false;
                 }
-            });*/
+            });
 
             layout.setOnClickListener(new View.OnClickListener(){
                 @Override
