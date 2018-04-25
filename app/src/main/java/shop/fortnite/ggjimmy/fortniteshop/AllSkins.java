@@ -81,14 +81,14 @@ public class AllSkins extends AppCompatActivity {
         outfitType = new SkinHolder();
         drawables = new ArrayList<>();
 
-        MobileAds.initialize(this, "ca-app-pub-5090360471586053~9240769580");
+        MobileAds.initialize(this, "ca-app-pub-5090360471586053~1383172270");
         adView = (AdView) findViewById(R.id.all_skins_banner);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
         try {
             new JsoupAsyncTask().execute();
-            setType("outfit");
+            //setType("outfit");
         }catch(Exception e){}
     }
 
@@ -117,7 +117,7 @@ public class AllSkins extends AppCompatActivity {
                 case android.R.id.home:
                     this.finish();
                     break;
-                case R.id.alllskins_favorites:
+                case R.id.alll_skins_favorites_icon:
                     startActivity(new Intent(AllSkins.this, Wishlist.class));
                 case R.id.sort_outfit:
                     setType("outfit");
@@ -146,35 +146,45 @@ public class AllSkins extends AppCompatActivity {
         SkinHolder names = new SkinHolder();
         SkinHolder prices = new SkinHolder();
         SkinHolder rarity = new SkinHolder() ;
-        SkinHolder outfitType = new SkinHolder() ;
-
-        for(int i=0;i<this.outfitType.list.size();i++){
-            if(this.outfitType.list.get(i).equals(type) && !this.urls.list.get(i).equals("")
-                    && !this.prices.list.get(i).equals("")){
-                if(!this.names.equals("")) {
+        SkinHolder outfitType = new SkinHolder();
+        int counter = 0;
+        for(int i=0;i<this.urls.list.size();i++){
+            if(this.outfitType.list.get(i).equals(type)){
+                if(counter%2==0) {
                     urls.list.add(this.urls.list.get(i));
                     names.list.add(this.names.list.get(i));
                     prices.list.add(this.prices.list.get(i));
                     rarity.list.add(this.rarity.list.get(i));
                     outfitType.list.add(this.outfitType.list.get(i));
+                }else{
+                    urls.list2.add(this.urls.list.get(i));
+                    names.list2.add(this.names.list.get(i));
+                    prices.list2.add(this.prices.list.get(i));
+                    rarity.list2.add(this.rarity.list.get(i));
+                    outfitType.list2.add(this.outfitType.list.get(i));
                 }
+                counter++;
             }
-        }
 
-        for(int i=0;i<this.outfitType.list2.size();i++){
-            if(this.outfitType.list2.get(i).equals(type) && !this.urls.list2.get(i).equals("")
-                    && !this.prices.list2.get(i).equals("")){
-                if(!this.names.list.get(i).equals("")) {
+            if(this.outfitType.list2.get(i).equals(type)){
+                if(counter%2==0) {
+                    urls.list.add(this.urls.list2.get(i));
+                    names.list.add(this.names.list2.get(i));
+                    prices.list.add(this.prices.list2.get(i));
+                    rarity.list.add(this.rarity.list2.get(i));
+                    outfitType.list.add(this.outfitType.list2.get(i));
+                }else{
                     urls.list2.add(this.urls.list2.get(i));
                     names.list2.add(this.names.list2.get(i));
                     prices.list2.add(this.prices.list2.get(i));
                     rarity.list2.add(this.rarity.list2.get(i));
                     outfitType.list2.add(this.outfitType.list2.get(i));
                 }
+                counter++;
             }
         }
-        if(type.equals("emote") || type.equals("pickaxe")) {
-            for (int i = 5; i > 0; i--) {
+        if(type.equals("emote") || type.equals("glider")) {
+            for (int i = 1; i > 0; i--) {
                 urls.list.remove(urls.list.size() - i);
             }
         }
@@ -197,7 +207,6 @@ public class AllSkins extends AppCompatActivity {
                 int outfitCount = 0;
                 int i = 0;
                 for(Element div : elements){
-                    //if(div.text().equals("All Items")){
                     if(div.attr("class").equals("row")){
                         if(i ==1) {
                             Elements items = div.getAllElements();
@@ -279,7 +288,8 @@ public class AllSkins extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<String> result){
             try {
-                setType("outfit");
+                adapter = new AllSkinsList(AllSkins.this, urls, names, prices, rarity,outfitType, drawables, drawables2);
+                listView.setAdapter(adapter);
             } catch (Exception e) {
 
             }

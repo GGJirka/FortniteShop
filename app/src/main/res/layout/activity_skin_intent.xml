@@ -61,6 +61,18 @@
     </android.support.design.widget.AppBarLayout>
 
 </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/skin_intent_ad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-5090360471586053/4133334986">
+        </com.google.android.gms.ads.AdView>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

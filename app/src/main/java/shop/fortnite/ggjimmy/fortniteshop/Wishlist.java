@@ -1,6 +1,7 @@
 package shop.fortnite.ggjimmy.fortniteshop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,7 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +30,7 @@ public class Wishlist extends AppCompatActivity {
     public ArrayList<Set<String>> skinNames;
     public ArrayList<String> key;
     public BaseAdapter adapter;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +58,52 @@ public class Wishlist extends AppCompatActivity {
         }catch(Exception e){
 
         }
-        adapter = new WishlistAdapter(Wishlist.this, skinNames,key);
+        MobileAds.initialize(this, "ca-app-pub-5090360471586053~1383172270");
+        mAdView = (AdView) findViewById(R.id.wishlist_ad);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
-        listView.setAdapter(adapter);
+        if(skinNames.isEmpty()){
+            TextView introductionWishlist = (TextView) findViewById(R.id.notification_introduction);
+            TextView introductionWishlist2 = (TextView) findViewById(R.id.notification_introduction2);
+            introductionWishlist.setVisibility(View.VISIBLE);
+            introductionWishlist2.setVisibility(View.VISIBLE);
+        }
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),skinNames.get(position).toString(),Toast.LENGTH_SHORT).show();
+                Set<String> set = skinNames.get(position);
+                String rarity="";
+                String name="";
+                String outfitType = "";
+                for(Iterator<String> it = set.iterator();it.hasNext();){
+                    String data = it.next();
+                    if(data.startsWith("5a")){
+                        //url = data;
+                    }else if(data.startsWith("1") || data.startsWith("2") || data.startsWith("8") ||
+                            data.startsWith("5") || data.equals("???")){
+                        //price = data;
+                    }else if(data.equals("legendary") || data.equals("epic") || data.equals("rare")
+                            || data.equals("uncommon")){
+                        rarity = data;
+                    }else if(data.equals("outfit") || data.equals("pickaxe") || data.equals("glider")
+                            || data.equals("emote")) {
+                        outfitType = data;
+                    }else{
+                        name = data;
+                    }
+                }
+                Intent skinIntent = new Intent(Wishlist.this, SkinIntent.class);
+                skinIntent.putExtra(FortniteShop.INTENT_ID, name);
+                skinIntent.putExtra(FortniteShop.OUTFIT_TYPE,rarity);
+                skinIntent.putExtra(FortniteShop.RARITY, outfitType);
+                startActivity(skinIntent);
             }
         });
+        adapter = new WishlistAdapter(Wishlist.this, skinNames,key);
+        listView.setAdapter(adapter);
+
+
     }
 
     @Override

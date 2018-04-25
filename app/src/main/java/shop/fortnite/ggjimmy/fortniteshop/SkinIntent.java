@@ -5,14 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,13 +27,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class SkinIntent extends AppCompatActivity {
     public static final String INTENT_ID = "SKIN_NAME";
@@ -42,7 +54,10 @@ public class SkinIntent extends AppCompatActivity {
     public String outfitType;
     public String rarity;
     public String price;
-
+    public String url;
+    public AdView mAdView;
+    private boolean isTouched = false;
+    private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +71,7 @@ public class SkinIntent extends AppCompatActivity {
         outfitType = getIntent().getExtras().getString(OUTFIT_TYPE);
         rarity = getIntent().getExtras().getString(RARITY);
         price = getIntent().getExtras().getString(PRICE);
-
+        url = getIntent().getExtras().getString("IMAGE_URL_INTENT");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
@@ -70,8 +85,17 @@ public class SkinIntent extends AppCompatActivity {
             noSkinDisplay.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(),"burbank.otf"));
             hideLoading();
         }else{
-            new JsoupAsyncTask().execute();
+            if(rarity.equals("emote")) {
+                initVideo();
+            }else{
+                new JsoupAsyncTask().execute();
+            }
         }
+        MobileAds.initialize(this, "ca-app-pub-5090360471586053~1383172270");
+
+        mAdView = (AdView) findViewById(R.id.skin_intent_ad);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, String>{
@@ -144,26 +168,29 @@ public class SkinIntent extends AppCompatActivity {
             if(rarity.toLowerCase().equals("outfit")) {
                 skin.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
+
             switch(outfitType) {
                 case "legendary":
-                    layout.setBackgroundColor(Color.parseColor("#ac592f"));
+                    layout.setBackgroundResource(R.drawable.legendary_background);
                     break;
                 case "epic":
-                    layout.setBackgroundColor(Color.parseColor("#833ca4"));
+                    layout.setBackgroundResource(R.drawable.epic_background);
                     break;
                 case "rare":
-                    layout.setBackgroundColor(Color.parseColor("#2474b1"));
+                    layout.setBackgroundResource(R.drawable.rare_background);
                     break;
                 case "uncommon":
-                    layout.setBackgroundColor(Color.parseColor("#1c8b2f"));
+                    layout.setBackgroundResource(R.drawable.common_background);
                     break;
-
             }
+
             skin.setImageBitmap(result);
             /*VideoView v = (VideoView) findViewById(R.id.video);
             v.setVideoPath("https://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4");
             v.start();*/
             layout.addView(skin);
+            /*PhotoViewAttacher attacher  = new PhotoViewAttacher(skin);
+            attacher.update();*/
         }
     }
     public void hideLoading(){
@@ -174,5 +201,119 @@ public class SkinIntent extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         this.finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    public void initVideo(){
+        final VideoView video = new VideoView(SkinIntent.this);
+
+        video.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+
+
+        video.setVideoURI(Uri.parse(getUrl()));
+        video.start();
+        video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
+
+        video.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(!isTouched) {
+                    isTouched = true;
+                    if (video.isPlaying()) {
+                        video.pause();
+                    } else {
+                        video.start();
+                    }
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isTouched = false;
+                        }
+                    }, 100);
+                }
+                return true;
+            }
+        });
+        layout.addView(video);
+
+    }
+    public String getUrl(){
+        switch(skinName.toLowerCase()){
+            case "flapper":
+                return "android.resource://" + getPackageName() + "/" + R.raw.flapper;
+            case "fresh":
+                return "android.resource://" + getPackageName() + "/" + R.raw.shit_dance;
+            case "electro shuffle":
+                return "android.resource://" + getPackageName() + "/" + R.raw.electro_shuffle;
+            case "disco fever":
+                return "android.resource://" + getPackageName() + "/" + R.raw.disco;
+            case "reanimated":
+                return "android.resource://" + getPackageName() + "/" + R.raw.reanimated;
+            case "rocket rodeo":
+                return "android.resource://" + getPackageName() + "/" + R.raw.rocket_ride;
+            case "best mates":
+                return "android.resource://" + getPackageName() + "/" + R.raw.best_mates;
+            case "floss":
+                return "android.resource://" + getPackageName() + "/" + R.raw.floss;
+            case "dab":
+                return "android.resource://" + getPackageName() + "/" + R.raw.dab;
+            case "pure salt":
+                return "android.resource://" + getPackageName() + "/" + R.raw.salt;
+            case "take the l":
+                return "android.resource://" + getPackageName() + "/" + R.raw.take_the_l;
+            case "the worm":
+                return "android.resource://" + getPackageName() + "/" + R.raw.worm;
+            case "jubilation":
+                return "android.resource://" + getPackageName() + "/" + R.raw.help;
+            case "finger guns":
+                return "android.resource://" + getPackageName() + "/" + R.raw.shot;
+            case "slow clap":
+                return "android.resource://" + getPackageName() + "/" + R.raw.slow_clap;
+            case "breakin'":
+                return "android.resource://" + getPackageName() + "/" + R.raw.dance;
+            case "rock out":
+                return "android.resource://" + getPackageName() + "/" + R.raw.rock_out;
+            case "the robot":
+                return "android.resource://" + getPackageName() + "/" + R.raw.robot;
+            case "hootenanny":
+                return "android.resource://" + getPackageName() + "/" + R.raw.hotenanny;
+            case "flippin' sexy":
+                return "android.resource://" + getPackageName() + "/" + R.raw.backflip;
+            case "ride the pony":
+                return "android.resource://" + getPackageName() + "/" + R.raw.ride;
+            case "make it rain":
+                return "android.resource://" + getPackageName() + "/" + R.raw.money_throw;
+            case "step it up":
+                return "android.resource://" + getPackageName() + "/" + R.raw.step_it_up;
+            case "click!":
+                return "android.resource://" + getPackageName() + "/" + R.raw.click;
+            case "kiss kiss":
+                return "android.resource://" + getPackageName() + "/" + R.raw.kiss;
+            case "confused":
+                return "android.resource://" + getPackageName() + "/" + R.raw.confused;
+            case "breaking point":
+                return "android.resource://" + getPackageName() + "/" + R.raw.breaking_point;
+            case "wiggle":
+                return "android.resource://" + getPackageName() + "/" + R.raw.cool_wave;
+            case "brush your shoulders":
+                return "android.resource://" + getPackageName() + "/" + R.raw.brush_shoulder;
+            case "face palm":
+                return "android.resource://" + getPackageName() + "/" + R.raw.facepalm;
+            case "true love":
+                return "android.resource://" + getPackageName() + "/" + R.raw.true_love;
+            case "salute":
+                return "android.resource://" + getPackageName() + "/" + R.raw.salute;
+            case "rock paper scissors":
+                return "android.resource://" + getPackageName() + "/" + R.raw.rock_paper;
+            case "gun show":
+                return "android.resource://" + getPackageName() + "/" + R.raw.gun_show;
+            default:
+                return "android.resource://" + getPackageName() + "/" + R.raw.confused;
+        }
     }
 }

@@ -20,6 +20,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -51,17 +52,17 @@ public class ItemList extends BaseAdapter {
     public TextView itemPrice;
     public Typeface font;
     public ArrayList<String> rarity;
-    public boolean download;
+    public ArrayList<Integer> id;
 
     public ItemList(Context context, ArrayList<String> items, ArrayList<String> itemNames, ArrayList<String> price,
-                    Typeface font, ArrayList<String> rarity,ArrayList<String> outfitType, boolean download){
+                    Typeface font, ArrayList<String> rarity,ArrayList<String> outfitType, ArrayList<Integer> id){
         this.context = context;
         this.items = items;
         this.itemNames = itemNames;
         this.price = price;
         this.font = font;
         this.rarity = rarity;
-        this.download = download;
+        this.id = id;
         this.outfitType = outfitType;
     }
 
@@ -85,7 +86,6 @@ public class ItemList extends BaseAdapter {
         View v = View.inflate(this.context, R.layout.item_list, null);
         final LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.item_layout);
         itemImg = (ImageView) v.findViewById(R.id.item_img);
-
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -102,6 +102,17 @@ public class ItemList extends BaseAdapter {
         final int millis = (hours*60*60 + minutes*60+seconds)*1000;
 
         if(position == 0){
+            final TextView dailyItems = (TextView) v.findViewById(R.id.daily_item);
+            final TextView dailyTimes = (TextView) v.findViewById(R.id.daily_time);
+            final LinearLayout daily = (LinearLayout) v.findViewById(R.id.featured_items);
+            dailyItems.setText("FEATURED ITEMS");
+            dailyItems.setTypeface(font);
+            dailyTimes.setTypeface(font);
+            dailyTimes.setTextSize(29);
+            dailyItems.setTextSize(29);
+            daily.setBackgroundResource(R.drawable.daily_items);
+        }
+        if(position ==id.get(0)){
             final TextView dailyItems = (TextView) v.findViewById(R.id.daily_item);
             final TextView dailyTimes = (TextView) v.findViewById(R.id.daily_time);
             final LinearLayout daily = (LinearLayout) v.findViewById(R.id.featured_items);
@@ -139,15 +150,12 @@ public class ItemList extends BaseAdapter {
         itemPrice = (TextView) v.findViewById(R.id.item_price);
         itemText.setText(itemNames.get(position));
         itemPrice.setText(price.get(position));
-        itemText.setTypeface(font);
-        String[] split = items.get(position).split("/");
-        Picasso.with(itemImg.getContext()).load("file:///android_asset/a"+split[split.length-2]+".png").into(itemImg);
+        itemText.setTypeface(Typeface.createFromAsset(context.getAssets(),"burbank.otf"));
 
-        /*if(itemImg.getDrawable() == null){
-            if(itemImg.getContext().) {
-                Picasso.with(itemImg.getContext()).load(items.get(position)).into(itemImg);
-            }
-        }*/
+
+        Picasso.with(itemImg.getContext()).load("file:///android_asset/a"+items.get(position)+".png").into(itemImg);
+
+        //Picasso.with(itemImg.getContext()).load("file:///android_asset/a"+items.get(position)+".png").into(itemImg);
 
         switch(rarity.get(position)){
             case "legendary":
@@ -166,7 +174,6 @@ public class ItemList extends BaseAdapter {
                 linearLayout.setBackgroundResource(R.drawable.uncommon_onclick);
                 break;
         }
-
         v.setTag(position);
 
         return v;

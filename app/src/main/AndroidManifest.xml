@@ -3,6 +3,8 @@
     package="shop.fortnite.ggjimmy.fortniteshop">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +15,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".FortniteShop"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,6 +45,9 @@
             android:name=".Wishlist"
             android:label="@string/title_activity_wishlist"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".SkinIntentFragment"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

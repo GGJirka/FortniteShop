@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/alllskins_favorites"
+        android:id="@+id/alll_skins_favorites_icon"
+        android:icon="@drawable/wishlist_icon"
         app:showAsAction="always"
-        android:title="wishlist"
-        android:icon="@drawable/wishlist_icon"/>
+        android:title="wishlist"/>
 
     <group android:id="@+id/group"
         android:checkableBehavior="single">

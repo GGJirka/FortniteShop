@@ -10,6 +10,7 @@
         android:orientation="horizontal"
         android:layout_marginRight="5sp"
         android:layout_marginLeft="5sp"
+        android:layout_marginTop="5sp"
         android:layout_marginBottom="10sp"
         android:id="@+id/featured_items"
         android:background="@color/black">

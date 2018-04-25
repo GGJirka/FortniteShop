@@ -5,12 +5,11 @@
         android:angle="360"
         android:centerX="50%"
         android:centerY="50%"
-
+        android:type="radial"
         android:gradientRadius="100%"
         android:endColor="#7B1FA2"
-        android:centerColor="#BA68C8"
-        android:startColor="#7B1FA2">
-    </gradient>
+        android:centerColor="#7B1FA2"
+        android:startColor="#BA68C8"/>
     <corners
         android:radius="1sp"/>
     <stroke

@@ -30,7 +30,32 @@
                 android:id="@+id/wishlist_title"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/wishlist_appbarlayout"
+            android:layout_marginTop="50sp"
+            android:text="Your wishlist is empty"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:textColor="@color/transparentwhite"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:id="@+id/notification_introduction"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notification_introduction"
+            android:layout_marginTop="10sp"
+            android:text="If you want to add a new item just hold it for while. Once the skin is in the shop you will get a notification, then it will be removed from your wishlist."
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:textColor="@color/transparentwhite"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:id="@+id/notification_introduction2"/>
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,6 +64,19 @@
             android:layout_below="@id/wishlist_appbarlayout"
             android:layout_marginTop="10sp"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/wishlist_ad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-5090360471586053/5845408880">
+        </com.google.android.gms.ads.AdView>
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

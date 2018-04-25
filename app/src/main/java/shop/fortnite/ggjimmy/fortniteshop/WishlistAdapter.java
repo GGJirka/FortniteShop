@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -52,7 +53,7 @@ public class WishlistAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View v = View.inflate(this.context, R.layout.wishlist_list, null);
+        final View v = View.inflate(this.context, R.layout.wishlist_list, null);
         prefs = context.getSharedPreferences("fshop.wishlist", Context.MODE_PRIVATE).edit();
         Set<String> set = items.get(position);
         String price = "";
@@ -62,15 +63,19 @@ public class WishlistAdapter extends BaseAdapter {
             if(data.startsWith("5a")){
                 url = data;
             }else if(data.startsWith("1") || data.startsWith("2") || data.startsWith("8") ||
-                    data.startsWith("5")){
+                    data.startsWith("5") || data.equals("???")){
                 price = data;
             }else if(data.equals("legendary") || data.equals("epic") || data.equals("rare")
                     || data.equals("uncommon")){
                 rarity = data;
+            }else if(data.equals("outfit") || data.equals("pickaxe") || data.equals("glider")
+                    || data.equals("emote")) {
+
             }else{
                 name = data;
             }
         }
+
         TextView itemName = (TextView) v.findViewById(R.id.wishlist_list_skinname);
         itemName.setTypeface(Typeface.createFromAsset(context.getAssets(), "burbank.otf"));
         itemName.setText(name);
@@ -83,12 +88,14 @@ public class WishlistAdapter extends BaseAdapter {
         ImageView remove = (ImageView) v.findViewById(R.id.wishlist_remove);
         remove.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                prefs.remove(key.get(position)).commit();
+            public void onClick(View va) {
                 items.remove(position);
                 notifyDataSetChanged();
+                prefs.remove(key.get(position)).apply();
+                key.remove(position);
             }
         });
+
         switch (rarity) {
             case "legendary":
                 layout.setBackgroundResource(R.drawable.wishlist_legendary);

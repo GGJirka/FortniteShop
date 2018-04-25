@@ -141,19 +141,19 @@ public class AllSkinsList extends BaseAdapter{
         try {
             switch (rarita) {
                 case "legendary":
-                    layout.setBackgroundResource(R.drawable.legendary);
+                    layout.setBackgroundResource(R.drawable.legendary_onclick);
                     break;
 
                 case "epic":
-                    layout.setBackgroundResource(R.drawable.epic);
+                    layout.setBackgroundResource(R.drawable.list_selector);
                     break;
 
                 case "rare":
-                    layout.setBackgroundResource(R.drawable.rare);
+                    layout.setBackgroundResource(R.drawable.rare_onclick);
                     break;
 
                 case "uncommon":
-                    layout.setBackgroundResource(R.drawable.uncommon);
+                    layout.setBackgroundResource(R.drawable.uncommon_onclick);
                     break;
             }
 
@@ -164,31 +164,37 @@ public class AllSkinsList extends BaseAdapter{
                     ArrayList<String> data = new ArrayList<>();
 
                     if(index == 1) {
-                        if(prices.list.get(position).startsWith("1") || prices.list.get(position).startsWith("2")
-                                || prices.list.get(position).startsWith("8") || prices.list.get(position).startsWith("5")) {
+                        String price = prices.list.get(position);
+                        if(price.startsWith("1") || price.startsWith("2") || price.startsWith("8")
+                                || price.startsWith("5") || price.equals("???")) {
                             data.add(names.list.get(position));
                             data.add(prices.list.get(position));
                             data.add(rarity.list.get(position));
+                            data.add(outfitType.list.get(position));
                             String[] split = urls.list.get(position).split("/");
                             data.add(split[split.length - 2]);
                             set.addAll(data);
                             prefs.putStringSet(split[split.length-2], set);
                             prefs.apply();
+                            Toast.makeText(context,"Added to wishlist",Toast.LENGTH_SHORT).show();
                         }
                     }else{
-                        if(prices.list2.get(position).startsWith("1") || prices.list2.get(position).startsWith("2")
-                                || prices.list2.get(position).startsWith("8") || prices.list2.get(position).startsWith("5")) {
+                        String price2 = prices.list2.get(position);
+                        if(price2.startsWith("1") || price2.startsWith("2") || price2.startsWith("8")
+                                || price2.startsWith("5") || price2.equals("???")) {
                             data.add(names.list2.get(position));
                             data.add(prices.list2.get(position));
                             data.add(rarity.list2.get(position));
+                            data.add(outfitType.list2.get(position));
                             String[] split = urls.list2.get(position).split("/");
                             data.add(split[split.length - 2]);
                             set.addAll(data);
                             prefs.putStringSet(split[split.length-2], set);
                             prefs.apply();
+                            Toast.makeText(context,"Added to wishlist",Toast.LENGTH_SHORT).show();
                         }
                     }
-                    Toast.makeText(context,"Added to wishlist",Toast.LENGTH_SHORT).show();
+
                     return false;
                 }
             });
@@ -196,35 +202,19 @@ public class AllSkinsList extends BaseAdapter{
             layout.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    switch (rarita) {
-                        case "legendary":
-                            layout.setBackgroundResource(R.drawable.legendary_selected);
-                            break;
-
-                        case "epic":
-                            layout.setBackgroundResource(R.drawable.epic_selected);
-                            break;
-
-                        case "rare":
-                            layout.setBackgroundResource(R.drawable.rare_selected);
-                            break;
-
-                        case "uncommon":
-                            layout.setBackgroundResource(R.drawable.uncommon_selected);
-                            break;
-                    }
-
                     Intent skinIntent = new Intent(context, SkinIntent.class);
                     if (index == 1) {
                         skinIntent.putExtra(INTENT_ID, names.list.get(position));
                         skinIntent.putExtra(OUTFIT_TYPE, rarity.list.get(position));
                         skinIntent.putExtra(RARITY, outfitType.list.get(position));
                         skinIntent.putExtra(PRICE, prices.list.get(position));
+                        skinIntent.putExtra("IMAGE_URL_INTENT",urls.list.get(position));
                     } else {
                         skinIntent.putExtra(INTENT_ID, names.list2.get(position));
                         skinIntent.putExtra(OUTFIT_TYPE, rarity.list2.get(position));
                         skinIntent.putExtra(RARITY, outfitType.list2.get(position));
                         skinIntent.putExtra(PRICE, prices.list2.get(position));
+                        skinIntent.putExtra("IMAGE_URL_INTENT",urls.list2.get(position));
                     }
                     context.startActivity(skinIntent);
                 }
